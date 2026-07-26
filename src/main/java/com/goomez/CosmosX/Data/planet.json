@@ -1,0 +1,7 @@
+[ {
+  "id" : 1,
+  "name" : "Zorion",
+  "distance" : 500,
+  "dangerLevel" : 3,
+  "resources" : [ "Iron", "Water" ]
+} ]
