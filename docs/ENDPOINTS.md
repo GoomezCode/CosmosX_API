@@ -95,12 +95,44 @@ POST /astronauts
 }
 ```
 
+> O campo `id` e gerado automaticamente pelo servidor.
+
 **Response 400 Bad Request:**
 ```json
 {
   "timestamp": "2026-09-09T10:00:00",
   "status": 400,
   "message": "name: must not be blank, rank: must not be blank"
+}
+```
+
+### Atualizar
+
+```
+PUT /astronauts/{id}
+```
+
+**Parametros:**
+| Parametro | Tipo | Obrigatorio | Descricao |
+|-----------|------|-------------|-----------|
+| id | Long | Sim | ID do astronauta |
+
+**Request Body:**
+```json
+{
+  "name": "Laura",
+  "rank": "Captain",
+  "experience": 900
+}
+```
+
+**Response 200 OK:**
+```json
+{
+  "id": 2,
+  "name": "Laura",
+  "rank": "Captain",
+  "experience": 900
 }
 ```
 
@@ -140,6 +172,37 @@ GET /spacecraft
 ]
 ```
 
+### Buscar por ID
+
+```
+GET /spacecraft/{id}
+```
+
+**Parametros:**
+| Parametro | Tipo | Obrigatorio | Descricao |
+|-----------|------|-------------|-----------|
+| id | Long | Sim | ID da nave |
+
+**Response 200 OK:**
+```json
+{
+  "id": 1,
+  "name": "Falcon-X",
+  "fuel": 1000,
+  "capacity": 5,
+  "status": "READY"
+}
+```
+
+**Response 404 Not Found:**
+```json
+{
+  "timestamp": "2026-09-09T10:00:00",
+  "status": 404,
+  "message": "Spacecraft not found with id: 1"
+}
+```
+
 ### Criar
 
 ```
@@ -175,6 +238,51 @@ POST /spacecraft
 }
 ```
 
+### Atualizar
+
+```
+PUT /spacecraft/{id}
+```
+
+**Parametros:**
+| Parametro | Tipo | Obrigatorio | Descricao |
+|-----------|------|-------------|-----------|
+| id | Long | Sim | ID da nave |
+
+**Request Body:**
+```json
+{
+  "name": "Apollo-7",
+  "fuel": 500,
+  "capacity": 3,
+  "status": "MAINTENANCE"
+}
+```
+
+**Response 200 OK:**
+```json
+{
+  "id": 2,
+  "name": "Apollo-7",
+  "fuel": 500,
+  "capacity": 3,
+  "status": "MAINTENANCE"
+}
+```
+
+### Deletar
+
+```
+DELETE /spacecraft/{id}
+```
+
+**Parametros:**
+| Parametro | Tipo | Obrigatorio | Descricao |
+|-----------|------|-------------|-----------|
+| id | Long | Sim | ID da nave |
+
+**Response 204 No Content**
+
 ---
 
 ## Planetas `/planet`
@@ -196,6 +304,37 @@ GET /planet
     "resources": ["Iron", "Water"]
   }
 ]
+```
+
+### Buscar por ID
+
+```
+GET /planet/{id}
+```
+
+**Parametros:**
+| Parametro | Tipo | Obrigatorio | Descricao |
+|-----------|------|-------------|-----------|
+| id | Long | Sim | ID do planeta |
+
+**Response 200 OK:**
+```json
+{
+  "id": 1,
+  "name": "Zorion",
+  "distance": 500,
+  "dangerLevel": 3,
+  "resources": ["Iron", "Water"]
+}
+```
+
+**Response 404 Not Found:**
+```json
+{
+  "timestamp": "2026-09-09T10:00:00",
+  "status": 404,
+  "message": "Planet not found with id: 1"
+}
 ```
 
 ### Criar
@@ -233,6 +372,51 @@ POST /planet
 }
 ```
 
+### Atualizar
+
+```
+PUT /planet/{id}
+```
+
+**Parametros:**
+| Parametro | Tipo | Obrigatorio | Descricao |
+|-----------|------|-------------|-----------|
+| id | Long | Sim | ID do planeta |
+
+**Request Body:**
+```json
+{
+  "name": "Mars-X",
+  "distance": 550,
+  "dangerLevel": 5,
+  "resources": ["Gold", "Water"]
+}
+```
+
+**Response 200 OK:**
+```json
+{
+  "id": 2,
+  "name": "Mars-X",
+  "distance": 550,
+  "dangerLevel": 5,
+  "resources": ["Gold", "Water"]
+}
+```
+
+### Deletar
+
+```
+DELETE /planet/{id}
+```
+
+**Parametros:**
+| Parametro | Tipo | Obrigatorio | Descricao |
+|-----------|------|-------------|-----------|
+| id | Long | Sim | ID do planeta |
+
+**Response 204 No Content**
+
 ---
 
 ## Missoes `/mission`
@@ -253,6 +437,36 @@ GET /mission
     "status": "PENDING"
   }
 ]
+```
+
+### Buscar por ID
+
+```
+GET /mission/{id}
+```
+
+**Parametros:**
+| Parametro | Tipo | Obrigatorio | Descricao |
+|-----------|------|-------------|-----------|
+| id | Long | Sim | ID da missao |
+
+**Response 200 OK:**
+```json
+{
+  "id": 1,
+  "planetId": 1,
+  "astronauts": [1, 2],
+  "status": "PENDING"
+}
+```
+
+**Response 404 Not Found:**
+```json
+{
+  "timestamp": "2026-09-09T10:00:00",
+  "status": 404,
+  "message": "Mission not found with id: 1"
+}
 ```
 
 ### Criar
@@ -285,7 +499,52 @@ POST /mission
 }
 ```
 
-> O status inicial e sempre `PENDING`. A execucao da missao ainda nao foi implementada.
+> O status inicial e sempre `PENDING`.
+
+### Atualizar
+
+```
+PUT /mission/{id}
+```
+
+**Parametros:**
+| Parametro | Tipo | Obrigatorio | Descricao |
+|-----------|------|-------------|-----------|
+| id | Long | Sim | ID da missao |
+
+**Request Body:**
+```json
+{
+  "planetId": 2,
+  "astronauts": [1, 3],
+  "status": "PENDING"
+}
+```
+
+**Response 200 OK:**
+```json
+{
+  "id": 1,
+  "planetId": 2,
+  "astronauts": [1, 3],
+  "status": "PENDING"
+}
+```
+
+### Deletar
+
+```
+DELETE /mission/{id}
+```
+
+**Parametros:**
+| Parametro | Tipo | Obrigatorio | Descricao |
+|-----------|------|-------------|-----------|
+| id | Long | Sim | ID da missao |
+
+**Response 204 No Content**
+
+> A execucao real da missao ainda nao foi implementada (ver roadmap).
 
 ---
 

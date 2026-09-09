@@ -2,6 +2,7 @@ package com.goomez.CosmosX.controller;
 
 import com.goomez.CosmosX.dto.MissionRequest;
 import com.goomez.CosmosX.dto.MissionResponse;
+import com.goomez.CosmosX.dto.MissionUpdateRequest;
 import com.goomez.CosmosX.model.Mission;
 import com.goomez.CosmosX.service.MissionService;
 import jakarta.validation.Valid;
@@ -28,6 +29,14 @@ public class MissionController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<MissionResponse> listById(@PathVariable Long id) {
+        Mission mission = service.listById(id);
+        return ResponseEntity.ok(new MissionResponse(
+            mission.getId(), mission.getPlanetId(), mission.getAstronauts(), mission.getStatus()
+        ));
+    }
+
     @PostMapping
     public ResponseEntity<MissionResponse> create(@Valid @RequestBody MissionRequest request) {
         Mission mission = new Mission(0, request.planetId(), request.astronauts(), "PENDING");
@@ -35,5 +44,20 @@ public class MissionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new MissionResponse(
             saved.getId(), saved.getPlanetId(), saved.getAstronauts(), saved.getStatus()
         ));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MissionResponse> update(@PathVariable Long id, @Valid @RequestBody MissionUpdateRequest request) {
+        Mission mission = new Mission(id, request.planetId(), request.astronauts(), request.status());
+        Mission updated = service.update(id, mission);
+        return ResponseEntity.ok(new MissionResponse(
+            updated.getId(), updated.getPlanetId(), updated.getAstronauts(), updated.getStatus()
+        ));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

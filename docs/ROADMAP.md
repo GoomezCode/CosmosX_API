@@ -18,7 +18,7 @@ Roadmap de implementacao do projeto CosmosX API.
 
 | Fase | Descricao | Prioridade | Status |
 |------|-----------|------------|--------|
-| 1 | CRUD Completo | Alta | Pendente |
+| 1 | CRUD Completo | Alta | ✅ Concluida |
 | 2 | Testes Unitarios | Alta | Pendente |
 | 3 | Simulacao de Missoes | Alta | Pendente |
 | 4 | Estatisticas e Ranking | Media | Pendente |
@@ -27,44 +27,45 @@ Roadmap de implementacao do projeto CosmosX API.
 
 ## Fase 1 - CRUD Completo
 
-**Objetivo:** Completar o CRUD para todas as entidades.
+**Objetivo:** Completar o CRUD para todas as entidades. ✅ Concluida
 
 ### Entidade: Spacecraft
 
 | Endpoint | Metodo | Status |
 |----------|--------|--------|
 | `/spacecraft` | GET | ✅ Implementado |
-| `/spacecraft/{id}` | GET | ❌ Pendente |
+| `/spacecraft/{id}` | GET | ✅ Implementado |
 | `/spacecraft` | POST | ✅ Implementado |
-| `/spacecraft/{id}` | PUT | ❌ Pendente |
-| `/spacecraft/{id}` | DELETE | ❌ Pendente |
+| `/spacecraft/{id}` | PUT | ✅ Implementado |
+| `/spacecraft/{id}` | DELETE | ✅ Implementado |
 
 ### Entidade: Planet
 
 | Endpoint | Metodo | Status |
 |----------|--------|--------|
 | `/planet` | GET | ✅ Implementado |
-| `/planet/{id}` | GET | ❌ Pendente |
+| `/planet/{id}` | GET | ✅ Implementado |
 | `/planet` | POST | ✅ Implementado |
-| `/planet/{id}` | PUT | ❌ Pendente |
-| `/planet/{id}` | DELETE | ❌ Pendente |
+| `/planet/{id}` | PUT | ✅ Implementado |
+| `/planet/{id}` | DELETE | ✅ Implementado |
 
 ### Entidade: Mission
 
 | Endpoint | Metodo | Status |
 |----------|--------|--------|
 | `/mission` | GET | ✅ Implementado |
-| `/mission/{id}` | GET | ❌ Pendente |
+| `/mission/{id}` | GET | ✅ Implementado |
 | `/mission` | POST | ✅ Implementado |
-| `/mission/{id}` | PUT | ❌ Pendente |
-| `/mission/{id}` | DELETE | ❌ Pendente |
+| `/mission/{id}` | PUT | ✅ Implementado |
+| `/mission/{id}` | DELETE | ✅ Implementado |
 
 ### Tarefas
 
-- [ ] Criar DTOs de Update (SpacecraftUpdateRequest, PlanetUpdateRequest, MissionUpdateRequest)
-- [ ] Adicionar metodos `listById`, `update`, `delete` nos Services
-- [ ] Adicionar endpoints nos Controllers
-- [ ] Atualizar documentacao ENDPOINTS.md
+- [x] Criar DTOs de Update (SpacecraftUpdateRequest, PlanetUpdateRequest, MissionUpdateRequest)
+- [x] Adicionar metodos `listById`, `update`, `delete` nos Services
+- [x] Adicionar endpoints nos Controllers
+- [x] Atualizar documentacao ENDPOINTS.md
+- [x] ID auto-gerado em todos os Services
 
 ---
 

@@ -2,6 +2,7 @@ package com.goomez.CosmosX.controller;
 
 import com.goomez.CosmosX.dto.SpacecraftRequest;
 import com.goomez.CosmosX.dto.SpacecraftResponse;
+import com.goomez.CosmosX.dto.SpacecraftUpdateRequest;
 import com.goomez.CosmosX.model.Spacecraft;
 import com.goomez.CosmosX.service.SpacecraftService;
 import jakarta.validation.Valid;
@@ -28,6 +29,14 @@ public class SpacecraftController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<SpacecraftResponse> listById(@PathVariable Long id) {
+        Spacecraft spacecraft = service.listById(id);
+        return ResponseEntity.ok(new SpacecraftResponse(
+            spacecraft.getId(), spacecraft.getName(), spacecraft.getFuel(), spacecraft.getCapacity(), spacecraft.getStatus()
+        ));
+    }
+
     @PostMapping
     public ResponseEntity<SpacecraftResponse> create(@Valid @RequestBody SpacecraftRequest request) {
         Spacecraft spacecraft = new Spacecraft(0, request.name(), request.fuel(), request.capacity(), request.status());
@@ -35,5 +44,20 @@ public class SpacecraftController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new SpacecraftResponse(
             saved.getId(), saved.getName(), saved.getFuel(), saved.getCapacity(), saved.getStatus()
         ));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<SpacecraftResponse> update(@PathVariable Long id, @Valid @RequestBody SpacecraftUpdateRequest request) {
+        Spacecraft spacecraft = new Spacecraft(id, request.name(), request.fuel(), request.capacity(), request.status());
+        Spacecraft updated = service.update(id, spacecraft);
+        return ResponseEntity.ok(new SpacecraftResponse(
+            updated.getId(), updated.getName(), updated.getFuel(), updated.getCapacity(), updated.getStatus()
+        ));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

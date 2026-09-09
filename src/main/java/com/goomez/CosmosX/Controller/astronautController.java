@@ -2,6 +2,7 @@ package com.goomez.CosmosX.controller;
 
 import com.goomez.CosmosX.dto.AstronautRequest;
 import com.goomez.CosmosX.dto.AstronautResponse;
+import com.goomez.CosmosX.dto.AstronautUpdateRequest;
 import com.goomez.CosmosX.model.Astronaut;
 import com.goomez.CosmosX.service.AstronautService;
 import jakarta.validation.Valid;
@@ -42,6 +43,15 @@ public class AstronautController {
         Astronaut saved = service.add(astronaut);
         return ResponseEntity.status(HttpStatus.CREATED).body(new AstronautResponse(
             saved.getId(), saved.getName(), saved.getRank(), saved.getExperience()
+        ));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AstronautResponse> update(@PathVariable Long id, @Valid @RequestBody AstronautUpdateRequest request) {
+        Astronaut astronaut = new Astronaut(id, request.name(), request.rank(), request.experience());
+        Astronaut updated = service.update(id, astronaut);
+        return ResponseEntity.ok(new AstronautResponse(
+            updated.getId(), updated.getName(), updated.getRank(), updated.getExperience()
         ));
     }
 

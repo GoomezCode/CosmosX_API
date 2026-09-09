@@ -32,11 +32,32 @@ public class AstronautService {
     public Astronaut add(Astronaut newAstronaut) {
         try {
             List<Astronaut> astronauts = listAll();
+            long nextId = astronauts.stream().mapToLong(Astronaut::getId).max().orElse(0) + 1;
+            newAstronaut.setId(nextId);
             astronauts.add(newAstronaut);
             mapper.writerWithDefaultPrettyPrinter().writeValue(arquivo, astronauts);
             return newAstronaut;
         } catch (Exception e) {
             throw new RuntimeException("Error saving astronaut", e);
+        }
+    }
+
+    public Astronaut update(long id, Astronaut updatedAstronaut) {
+        try {
+            List<Astronaut> astronauts = listAll();
+            Astronaut existing = astronauts.stream()
+                .filter(a -> a.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Astronaut not found with id: " + id));
+            existing.setName(updatedAstronaut.getName());
+            existing.setRank(updatedAstronaut.getRank());
+            existing.setExperience(updatedAstronaut.getExperience());
+            mapper.writerWithDefaultPrettyPrinter().writeValue(arquivo, astronauts);
+            return existing;
+        } catch (ResourceNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Error updating astronaut", e);
         }
     }
 

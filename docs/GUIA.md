@@ -20,7 +20,7 @@ Guia completo para configuracao, execucao e contribuicao no projeto.
 
 | Ferramenta | Versao Minima | Como verificar |
 |------------|---------------|----------------|
-| Java | 26 | `java -version` |
+| Java | 25 | `java -version` |
 | Maven | 3.9+ | `mvn -version` |
 
 > O projeto inclui o Maven Wrapper (`mvnw` / `mvnw.cmd`), entao o Maven nao precisa estar instalado globalmente.

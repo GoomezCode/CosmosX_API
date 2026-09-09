@@ -19,7 +19,7 @@ Os dados sao persistidos em arquivos `.json` localizados em `src/main/resources/
 
 ## Tecnologias
 
-- Java 26
+- Java 25
 - Spring Boot 4.1.0 (Spring Web MVC)
 - Jackson (`tools.jackson`) para serializacao/deserializacao JSON
 - Bean Validation (`spring-boot-starter-validation`)
@@ -57,10 +57,10 @@ A aplicacao sobe por padrao em `http://localhost:8080`.
 
 | Recurso | GET all | GET by ID | POST | PUT | DELETE |
 |---------|---------|-----------|------|-----|--------|
-| `/astronauts` | ✅ | ✅ | ✅ | ❌ | ✅ |
-| `/spacecraft` | ✅ | ❌ | ✅ | ❌ | ❌ |
-| `/planet` | ✅ | ❌ | ✅ | ❌ | ❌ |
-| `/mission` | ✅ | ❌ | ✅ | ❌ | ❌ |
+| `/astronauts` | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `/spacecraft` | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `/planet` | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `/mission` | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 Documentacao detalhada: [docs/ENDPOINTS.md](docs/ENDPOINTS.md)
 
@@ -79,10 +79,11 @@ Documentacao detalhada: [docs/ENDPOINTS.md](docs/ENDPOINTS.md)
 - [x] CRUD de naves
 - [x] CRUD de planetas
 - [x] Cadastro simples de missoes
+- [x] CRUD completo (GET by ID, DELETE, PUT para todas entidades)
+- [x] ID auto-gerado nas entidades
 - [x] DTO Pattern (Request/Response)
 - [x] Bean Validation
 - [x] Global Exception Handler
-- [ ] CRUD completo (GET by ID, DELETE, PUT para todas entidades)
 - [ ] Testes unitarios
 - [ ] Execucao de missoes (`/missions/{id}/start`)
 - [ ] Sistema de combustivel
