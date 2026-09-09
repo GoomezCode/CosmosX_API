@@ -1,224 +1,131 @@
-<h1 align="center">🚀 CosmosX API</h1>
+<h1 align="center">CosmosX API</h1>
 
-API REST em **Java + Spring Boot** para gerenciamento de uma agência espacial fictícia: astronautas, naves espaciais, planetas e missões.
+API REST em **Java + Spring Boot** para gerenciamento de uma agencia espacial ficticia: astronautas, naves espaciais, planetas e missoes.
 
-> ⚠️ **Projeto em desenvolvimento.** O CRUD básico das entidades já está funcionando, mas a parte mais interessante do projeto — a **simulação de exploração espacial** — ainda não foi implementada. Veja a seção [Roadmap](#-roadmap--próximos-passos) abaixo.
+> Projeto em desenvolvimento. CRUD basico, simulacao de missoes, estatisticas e persistencia JPA/H2 ja implementados. Veja o [Roadmap](docs/ROADMAP.md).
 
 ---
 
-## 📌 Sobre o projeto
+## Sobre o projeto
 
-O CosmosX API é uma API para controlar operações de uma frota espacial. Hoje ela permite cadastrar e consultar:
+O CosmosX API e uma API para controlar operacoes de uma frota espacial. Hoje ela permite cadastrar e consultar:
 
-- 👨‍🚀 Astronautas
-- 🚀 Naves espaciais (spacecrafts)
-- 🌍 Planetas
-- 🛰️ Missões
+- Astronautas
+- Naves espaciais (spacecrafts)
+- Planetas
+- Missoes
 
-Os dados são persistidos em arquivos `.json` (sem banco de dados por enquanto), localizados em `src/main/java/com/goomez/CosmosX/Data/`.
+Os dados sao persistidos em um banco **H2** (arquivo `./data/`, gitignored) usando **JPA/Hibernate**.
 
-## 🛠️ Tecnologias
+## Tecnologias
 
-- Java 26
+- Java 25
 - Spring Boot 4.1.0 (Spring Web MVC)
-- Jackson (`tools.jackson`) para serialização/desserialização JSON
-- Maven (com Maven Wrapper — `mvnw` / `mvnw.cmd`)
+- Spring Data JPA (Hibernate)
+- H2 (banco embarcado + console web)
+- Bean Validation (`spring-boot-starter-validation`)
+- Swagger/OpenAPI (springdoc-openapi)
+- JaCoCo (cobertura >= 80% de linhas)
+- Maven (com Maven Wrapper)
 
-## 📂 Estrutura do projeto
+## Estrutura do projeto
 
 ```
 src/main/java/com/goomez/CosmosX/
-├── Controller/       # Endpoints REST
-├── Service/          # Regras de negócio e persistência em JSON
-├── Model/            # Entidades (Astronaut, Mission, Planet, Spacecraft)
-├── Data/              # Arquivos .json usados como "banco de dados"
-└── CosmosXApplication.java
+├── config/          # CORS, OpenAPI, DataSeeder
+├── controller/      # Endpoints REST
+├── service/         # Regras de negocio
+├── repository/      # Repositorios JPA
+├── model/           # Entidades JPA
+├── dto/             # Request/Response records
+├── exception/       # Excecoes customizadas
+└── handler/         # Global Exception Handler
 ```
 
-## ▶️ Como executar
+## Como executar
 
-Pré-requisitos: **Java 26** e **Maven** (ou use o wrapper incluso no projeto).
+Pre-requisitos: **JDK 25** e **Maven** (ou use o wrapper incluso no projeto).
 
 ```bash
-# clonar o repositório
+# clonar o repositorio
 git clone https://github.com/GoomezCode/CosmosX_API.git
 cd CosmosX_API
 
-# rodar a aplicação
+# rodar a aplicacao
 ./mvnw spring-boot:run     # Linux/Mac
 mvnw.cmd spring-boot:run   # Windows
 ```
 
-A aplicação sobe por padrão em `http://localhost:8080`.
+A aplicacao sobe por padrao em `http://localhost:8080`.
 
-## 📡 Endpoints disponíveis (implementados atualmente)
+| Recurso | URL |
+|---------|-----|
+| API | http://localhost:8080 |
+| Swagger UI | http://localhost:8080/swagger-ui.html |
+| OpenAPI JSON | http://localhost:8080/v3/api-docs |
+| H2 Console | http://localhost:8080/h2-console |
 
-### Astronautas — `/astronauts`
-| Método | Rota | Descrição |
-|---|---|---|
-| GET | `/astronauts` | Lista todos os astronautas |
-| GET | `/astronauts/{id}` | Busca um astronauta por ID |
-| POST | `/astronauts` | Cadastra um novo astronauta |
-| DELETE | `/astronauts/{id}` | Remove um astronauta |
+## Testes
 
-**Exemplo de corpo (POST):**
-```json
-{
-  "id": 2,
-  "name": "Laura",
-  "rank": "Pilot",
-  "experience": 800
-}
+```bash
+# testes + gate de cobertura (JaCoCo >= 80% linhas)
+./mvnw verify
 ```
 
-### Naves — `/spacecraft`
-| Método | Rota | Descrição |
-|---|---|---|
-| GET | `/spacecraft` | Lista todas as naves |
-| POST | `/spacecraft` | Cadastra uma nova nave |
+## Endpoints disponiveis
 
-```json
-{
-  "id": 2,
-  "name": "Falcon-X",
-  "fuel": 1000,
-  "capacity": 5,
-  "status": "READY"
-}
-```
+| Recurso | GET all | GET by ID | POST | PUT | DELETE |
+|---------|---------|-----------|------|-----|--------|
+| `/astronauts` | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `/spacecraft` | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `/planet` | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `/mission` | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `/mission/{id}/start` | - | - | ✅ | - | - |
+| `/mission/history` | ✅ | - | - | - | - |
+| `/stats` | ✅ | - | - | - | - |
+| `/ranking` | ✅ | - | - | - | - |
+| `/exploration/discover` | - | - | ✅ | - | - |
 
-### Planetas — `/planet`
-| Método | Rota | Descrição |
-|---|---|---|
-| GET | `/planet` | Lista todos os planetas |
-| POST | `/planet` | Cadastra um novo planeta |
+Documentacao detalhada: [docs/ENDPOINTS.md](docs/ENDPOINTS.md)
 
-```json
-{
-  "id": 2,
-  "name": "Mars-X",
-  "distance": 500,
-  "dangerLevel": 4,
-  "resources": ["Iron", "Water"]
-}
-```
+## Documentacao
 
-### Missões — `/mission`
-| Método | Rota | Descrição |
-|---|---|---|
-| GET | `/mission` | Lista todas as missões |
-| POST | `/mission` | Cadastra uma nova missão |
+| Arquivo | Descricao |
+|---------|-----------|
+| [GUIA.md](docs/GUIA.md) | Guia completo do projeto |
+| [ENDPOINTS.md](docs/ENDPOINTS.md) | Documentacao dos endpoints |
+| [ROADMAP.md](docs/ROADMAP.md) | Roadmap de implementacao |
+| [ARQUITETURA.md](docs/ARQUITETURA.md) | Padroes e arquitetura |
 
-```json
-{
-  "id": 1,
-  "planetId": 1,
-  "astronauts": [1, 2],
-  "status": "PENDING"
-}
-```
-
-> Por enquanto, `POST /mission` apenas **salva** o registro da missão. Ela ainda não é *executada* de fato (ver roadmap).
-
----
-
-## 🧭 Roadmap / Próximos passos
-
-Esta é a parte que ainda **não foi implementada** e é o principal objetivo do projeto: transformar o cadastro de missões em uma **simulação real de exploração espacial**.
-
-### 🎮 Simulação de exploração
-Em vez de só salvar dados, a ideia é que a missão vire uma operação de verdade:
-
-```
-POST /missions/1/start
-```
-
-Resposta esperada:
-```json
-{
-  "missionId": 1,
-  "status": "SUCCESS",
-  "fuelConsumed": 300,
-  "resourcesFound": ["Gold", "Water"]
-}
-```
-
-### ⛽ Sistema de combustível
-Cada planeta tem uma `distance`, e a nave só pode viajar até lá se tiver combustível suficiente:
-
-```java
-if (ship.getFuel() < planet.getDistance()) {
-    throw new RuntimeException("Insufficient fuel");
-}
-```
-
-### ☄️ Sistema de perigo
-Cada planeta possui um `dangerLevel`. Ao iniciar a missão, um evento aleatório é sorteado e pode resultar em:
-
-- Falha mecânica
-- Ataque alienígena
-- Tempestade cósmica
-- Sucesso
-
-### 💎 Recursos descobertos
-Planetas podem conter recursos como `Iron`, `Gold`, `Titanium`, `Crystal`, `Water`. Ao final de uma missão bem-sucedida, um ou mais recursos (com quantidade) são gerados, por exemplo:
-
-```json
-{
-  "resource": "Titanium",
-  "quantity": 35
-}
-```
-
-### 📊 Estatísticas gerais
-```
-GET /stats
-```
-```json
-{
-  "missions": 48,
-  "successes": 39,
-  "failures": 9,
-  "resourcesCollected": 1250
-}
-```
-
-### 🏆 Funcionalidades avançadas
-- **Ranking de astronautas** — `GET /ranking`
-  ```json
-  [{ "name": "Daniel", "experience": 5200 }]
-  ```
-- **Histórico de missões** — `GET /missions/history`
-- **Descoberta automática de planetas** — `POST /exploration/discover`
-  ```json
-  {
-    "name": "Nebulon-7",
-    "distance": 1200,
-    "dangerLevel": 6
-  }
-  ```
-
----
-
-## ✅ Status atual
+## Status atual
 
 - [x] CRUD de astronautas
 - [x] CRUD de naves
 - [x] CRUD de planetas
-- [x] Cadastro simples de missões
-- [ ] Execução de missões (`/missions/{id}/start`)
-- [ ] Sistema de combustível
-- [ ] Sistema de perigo / eventos aleatórios
-- [ ] Geração de recursos ao fim da missão
-- [ ] Endpoint de estatísticas (`/stats`)
-- [ ] Ranking de astronautas
-- [ ] Histórico de missões
-- [ ] Descoberta automática de planetas
+- [x] Cadastro simples de missoes
+- [x] CRUD completo (GET by ID, DELETE, PUT para todas entidades)
+- [x] ID auto-gerado nas entidades
+- [x] DTO Pattern (Request/Response)
+- [x] Bean Validation
+- [x] Global Exception Handler
+- [x] Testes unitarios (95 testes)
+- [x] Execucao de missoes (`/mission/{id}/start`)
+- [x] Sistema de combustivel
+- [x] Sistema de perigo / eventos aleatorios
+- [x] Geracao de recursos ao fim da missao
+- [x] Endpoint de estatisticas (`/stats`)
+- [x] Ranking de astronautas (`/ranking`)
+- [x] Historico de missoes (`/mission/history`)
+- [x] Descoberta automatica de planetas (`/exploration/discover`)
+- [x] Persistencia JPA + H2
+- [x] Swagger/OpenAPI
+- [x] CORS configurado
+- [x] JaCoCo com gate de cobertura >= 80%
 
-## 🤝 Contribuindo
+## Contribuindo
 
-Este é um projeto pessoal em desenvolvimento. Sugestões, issues e pull requests são bem-vindos!
+Este e um projeto pessoal em desenvolvimento. Sugestoes, issues e pull requests sao bem-vindos!
 
-## 📄 Licença
+## Licenca
 
-Nenhuma licença definida até o momento.
+Nenhuma licenca definida ate o momento.

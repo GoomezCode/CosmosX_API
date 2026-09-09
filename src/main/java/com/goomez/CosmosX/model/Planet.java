@@ -1,13 +1,30 @@
 package com.goomez.CosmosX.model;
 
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+
 import java.util.List;
 
+@Entity
 public class Planet {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
     private int distance;
     private int dangerLevel;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "planet_resources", joinColumns = @JoinColumn(name = "planet_id"))
     private List<String> resources;
+
+    private String discoveredAt;
 
     public Planet() {}
 
@@ -57,5 +74,13 @@ public class Planet {
 
     public void setResources(List<String> resources) {
         this.resources = resources;
+    }
+
+    public String getDiscoveredAt() {
+        return discoveredAt;
+    }
+
+    public void setDiscoveredAt(String discoveredAt) {
+        this.discoveredAt = discoveredAt;
     }
 }
