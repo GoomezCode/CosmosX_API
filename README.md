@@ -1,19 +1,31 @@
 <h1 align="center">CosmosX API</h1>
 
-API REST em **Java + Spring Boot** para gerenciamento de uma agencia espacial ficticia: astronautas, naves espaciais, planetas e missoes.
+<p align="center">
+  <img alt="Versao" src="https://img.shields.io/badge/versao-v2.0.0-blue">
+  <img alt="Status" src="https://img.shields.io/badge/status-concluido-success">
+  <img alt="Testes" src="https://img.shields.io/badge/testes-98%20passaram-brightgreen">
+  <img alt="Cobertura" src="https://img.shields.io/badge/cobertura-%3E%3D97%25-brightgreen">
+  <img alt="Java" src="https://img.shields.io/badge/java-25-orange">
+  <img alt="Spring Boot" src="https://img.shields.io/badge/Spring%20Boot-4.1.0-brightgreen">
+  <img alt="Licenca" src="https://img.shields.io/badge/licenca-MIT-blue">
+</p>
 
-> Projeto em desenvolvimento. CRUD basico, simulacao de missoes, estatisticas e persistencia JPA/H2 ja implementados. Veja o [Roadmap](docs/ROADMAP.md).
+API REST em **Java + Spring Boot** para gerenciamento de uma agencia espacial ficticia: astronautas, naves espaciais, planetas, missoes, simulacao de missoes, estatisticas e exploracao.
+
+> ✅ **Projeto CONCLUIDO.** Todas as fases do [Roadmap](docs/ROADMAP.md) foram implementadas e entregues na tag `v2.0.0`.
 
 ---
 
 ## Sobre o projeto
 
-O CosmosX API e uma API para controlar operacoes de uma frota espacial. Hoje ela permite cadastrar e consultar:
+O CosmosX API e uma API para controlar operacoes de uma frota espacial. Ela permite cadastrar e consultar:
 
 - Astronautas
 - Naves espaciais (spacecrafts)
 - Planetas
 - Missoes
+
+Alem disso, inclui simulacao de execucao de missoes (com eventos aleatorios de perigo, consumo de combustivel e coleta de recursos), estatisticas gerais, ranking de astronautas, historico e descoberta automatica de planetas.
 
 Os dados sao persistidos em um banco **H2** (arquivo `./data/`, gitignored) usando **JPA/Hibernate**.
 
@@ -24,6 +36,7 @@ Os dados sao persistidos em um banco **H2** (arquivo `./data/`, gitignored) usan
 - Spring Data JPA (Hibernate)
 - H2 (banco embarcado + console web)
 - Bean Validation (`spring-boot-starter-validation`)
+- Spring Boot Actuator (health check `/actuator/health`)
 - Swagger/OpenAPI (springdoc-openapi)
 - JaCoCo (cobertura >= 80% de linhas)
 - Maven (com Maven Wrapper)
@@ -64,6 +77,7 @@ A aplicacao sobe por padrao em `http://localhost:8080`.
 | Swagger UI | http://localhost:8080/swagger-ui.html |
 | OpenAPI JSON | http://localhost:8080/v3/api-docs |
 | H2 Console | http://localhost:8080/h2-console |
+| Health Check | http://localhost:8080/actuator/health |
 
 ## Testes
 
@@ -71,6 +85,8 @@ A aplicacao sobe por padrao em `http://localhost:8080`.
 # testes + gate de cobertura (JaCoCo >= 80% linhas)
 ./mvnw verify
 ```
+
+Suite: **98 testes** (unitarios de services/controllers + integracao E2E com H2 in-memory), 0 falhas, cobertura >= 97%.
 
 ## Endpoints disponiveis
 
@@ -85,6 +101,7 @@ A aplicacao sobe por padrao em `http://localhost:8080`.
 | `/stats` | ✅ | - | - | - | - |
 | `/ranking` | ✅ | - | - | - | - |
 | `/exploration/discover` | - | - | ✅ | - | - |
+| `/actuator/health` | ✅ | - | - | - | - |
 
 Documentacao detalhada: [docs/ENDPOINTS.md](docs/ENDPOINTS.md)
 
@@ -92,40 +109,35 @@ Documentacao detalhada: [docs/ENDPOINTS.md](docs/ENDPOINTS.md)
 
 | Arquivo | Descricao |
 |---------|-----------|
-| [GUIA.md](docs/GUIA.md) | Guia completo do projeto |
+| [GUIA.md](docs/GUIA.md) | Guia de configuracao e execucao |
 | [ENDPOINTS.md](docs/ENDPOINTS.md) | Documentacao dos endpoints |
-| [ROADMAP.md](docs/ROADMAP.md) | Roadmap de implementacao |
+| [ROADMAP.md](docs/ROADMAP.md) | Roadmap de implementacao (Fases 1-6) |
 | [ARQUITETURA.md](docs/ARQUITETURA.md) | Padroes e arquitetura |
+| [TECHNICAL_REFERENCE.md](docs/TECHNICAL_REFERENCE.md) | Referencia tecnica consolidada |
+| [CHANGELOG.md](CHANGELOG.md) | Historico de versoes |
 
-## Status atual
+## Status
 
-- [x] CRUD de astronautas
-- [x] CRUD de naves
-- [x] CRUD de planetas
-- [x] Cadastro simples de missoes
-- [x] CRUD completo (GET by ID, DELETE, PUT para todas entidades)
+- [x] CRUD de astronautas, naves, planetas e missoes (com GET by ID, PUT e DELETE)
 - [x] ID auto-gerado nas entidades
 - [x] DTO Pattern (Request/Response)
 - [x] Bean Validation
 - [x] Global Exception Handler
-- [x] Testes unitarios (95 testes)
-- [x] Execucao de missoes (`/mission/{id}/start`)
-- [x] Sistema de combustivel
-- [x] Sistema de perigo / eventos aleatorios
-- [x] Geracao de recursos ao fim da missao
-- [x] Endpoint de estatisticas (`/stats`)
-- [x] Ranking de astronautas (`/ranking`)
-- [x] Historico de missoes (`/mission/history`)
+- [x] Simulacao de missoes (`/mission/{id}/start`) com combustivel, perigo e recursos
+- [x] Estatisticas (`/stats`), ranking (`/ranking`) e historico (`/mission/history`)
 - [x] Descoberta automatica de planetas (`/exploration/discover`)
 - [x] Persistencia JPA + H2
 - [x] Swagger/OpenAPI
 - [x] CORS configurado
+- [x] Spring Boot Actuator (`/actuator/health`)
+- [x] Testes unitarios + integracao E2E (98 testes, 0 falhas)
 - [x] JaCoCo com gate de cobertura >= 80%
+- [x] Licenca MIT
 
 ## Contribuindo
 
-Este e um projeto pessoal em desenvolvimento. Sugestoes, issues e pull requests sao bem-vindos!
+Sugestoes, issues e pull requests sao bem-vindos! Veja o fluxo de contribuicao no [GUIA](docs/GUIA.md).
 
 ## Licenca
 
-Nenhuma licenca definida ate o momento.
+Distribuido sob a licenca **MIT**. Veja o arquivo [LICENSE](LICENSE).

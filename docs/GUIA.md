@@ -47,12 +47,15 @@ CosmosX_API/
 │   └── skills/
 │       └── java-design-patterns/
 │           └── SKILL.md
+├── CHANGELOG.md                  # Historico de versoes
+├── LICENSE                       # Licenca MIT
 ├── data/                         # Banco H2 (runtime, gitignored)
 ├── docs/                         # Documentacao
 │   ├── GUIA.md
 │   ├── ENDPOINTS.md
 │   ├── ROADMAP.md
-│   └── ARQUITETURA.md
+│   ├── ARQUITETURA.md
+│   └── TECHNICAL_REFERENCE.md
 ├── src/
 │   ├── main/
 │   │   ├── java/com/goomez/CosmosX/
@@ -70,6 +73,7 @@ CosmosX_API/
 │   └── test/
 │       ├── java/com/goomez/CosmosX/
 │       │   ├── CosmosXApplicationTests.java
+│       │   ├── e2e/              # Teste de integracao E2E
 │       │   ├── controller/       # Testes de endpoint (MockMvc)
 │       │   └── service/          # Testes de services (Mockito)
 │       └── resources/
@@ -101,6 +105,9 @@ spring.h2.console.path=/h2-console
 
 # CORS (site integrado)
 app.cors.allowed-origins=*
+
+# Actuator (health check)
+management.endpoints.web.exposure.include=health
 ```
 
 Porta padrao: **8080**
@@ -120,6 +127,7 @@ server.port=8081
 | `spring-boot-starter-data-jpa` | Persistencia JPA (Hibernate) |
 | `spring-boot-h2console` | Banco H2 + console web |
 | `spring-boot-starter-validation` | Bean Validation |
+| `spring-boot-starter-actuator` | Health check (`/actuator/health`) |
 | `springdoc-openapi-starter-webmvc-ui` | Swagger/OpenAPI |
 | `spring-boot-devtools` | Hot reload (dev) |
 | `spring-boot-starter-webmvc-test` | Testes (JUnit 5, MockMvc, Mockito) |
@@ -133,7 +141,7 @@ server.port=8081
 mvnw.cmd spring-boot:run   # Windows
 
 # Ou apos compilar
-java -jar target/CosmosX-0.0.1-SNAPSHOT.jar
+java -jar target/CosmosX-2.0.0.jar
 ```
 
 A aplicacao estara disponivel em: `http://localhost:8080`
@@ -144,6 +152,7 @@ A aplicacao estara disponivel em: `http://localhost:8080`
 | Swagger UI | http://localhost:8080/swagger-ui.html |
 | OpenAPI JSON | http://localhost:8080/v3/api-docs |
 | H2 Console | http://localhost:8080/h2-console |
+| Health Check | http://localhost:8080/actuator/health |
 
 ## Testes
 

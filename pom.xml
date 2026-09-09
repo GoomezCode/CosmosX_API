@@ -10,21 +10,29 @@
 	</parent>
 	<groupId>com.goomez</groupId>
 	<artifactId>CosmosX</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
-	<url/>
+	<version>2.0.0</version>
+	<name>CosmosX API</name>
+	<description>REST API for a fictional space agency: astronauts, spacecraft, planets, missions, statistics and exploration.</description>
+	<url>https://github.com/GoomezCode/CosmosX_API</url>
 	<licenses>
-		<license/>
+		<license>
+			<name>MIT License</name>
+			<url>https://opensource.org/licenses/MIT</url>
+			<distribution>repo</distribution>
+		</license>
 	</licenses>
 	<developers>
-		<developer/>
+		<developer>
+			<id>GoomezCode</id>
+			<name>GoomezCode</name>
+			<url>https://github.com/GoomezCode</url>
+		</developer>
 	</developers>
 	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
+		<connection>scm:git:https://github.com/GoomezCode/CosmosX_API.git</connection>
+		<developerConnection>scm:git:git@github.com:GoomezCode/CosmosX_API.git</developerConnection>
+		<tag>v2.0.0</tag>
+		<url>https://github.com/GoomezCode/CosmosX_API</url>
 	</scm>
 	<properties>
 		<java.version>25</java.version>
@@ -44,6 +52,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 
 		<dependency>

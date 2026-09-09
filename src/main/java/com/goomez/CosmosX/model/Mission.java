@@ -39,7 +39,7 @@ public class Mission {
         this.id = id;
         this.spacecraftId = spacecraftId;
         this.planetId = planetId;
-        this.astronauts = astronauts;
+        this.astronauts = new ArrayList<>(astronauts);
         this.status = status;
     }
 
@@ -72,7 +72,7 @@ public class Mission {
     }
 
     public void setAstronauts(List<Long> astronauts) {
-        this.astronauts = astronauts;
+        this.astronauts = astronauts == null ? null : new ArrayList<>(astronauts);
     }
 
     public String getStatus() {
@@ -96,7 +96,7 @@ public class Mission {
     }
 
     public void setResourcesFound(List<ResourceFound> resourcesFound) {
-        this.resourcesFound = resourcesFound;
+        this.resourcesFound = resourcesFound == null ? new ArrayList<>() : new ArrayList<>(resourcesFound);
     }
 
     public String getCompletedAt() {
