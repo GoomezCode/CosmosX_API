@@ -24,7 +24,7 @@ Roadmap de implementacao do projeto CosmosX API.
 | 2 | Testes Unitarios | Alta | ✅ Concluida |
 | 3 | Simulacao de Missoes | Alta | ✅ Concluida |
 | 4 | Estatisticas e Ranking | Media | ✅ Concluida |
-| 5 | Preparacao p/ Integracao com Site | Alta | ⏳ Pendente |
+| 5 | Preparacao p/ Integracao com Site | Alta | ✅ Concluida |
 | 6 | Validacao Final e Entrega | Alta | ⏳ Pendente |
 
 ---
@@ -341,25 +341,34 @@ POST /exploration/discover
 
 ## Fase 5 - Preparacao p/ Integracao com Site (Portfolio)
 
-**Objetivo:** Preparar a API para o site futuro: persistencia real (JPA + H2), CORS, Swagger/OpenAPI, cobertura medida (JaCoCo) e entrega via `main`. ⏳ Pendente
+**Objetivo:** Preparar a API para o site futuro: persistencia real (JPA + H2), CORS, Swagger/OpenAPI, cobertura medida (JaCoCo) e entrega via `main`. ✅ Concluida
 
-> **Decisoes de design aprovadas:** migracao JSON -> JPA + H2 (arquivo em `./data/`, gitignored); `ResourceFound` vira `@Embeddable`; API publica leitura + escrita (sem autenticacao por enquanto); tag `v1.0.0` no merge para `main`.
+> **Decisoes de design aprovadas:** migracao JSON -> JPA + H2 (arquivo em `./data/`, gitignored); `ResourceFound` virou `@Embeddable`; API publica leitura + escrita (sem autenticacao por enquanto); tag `v1.0.0` criada no merge para `main`.
 
 ### Tarefas
 
-- [ ] Adicionar `spring-boot-starter-data-jpa` e H2 ao `pom.xml`
-- [ ] Anotar entidades (`@Entity`, `@Id`, `@GeneratedValue`, `@ElementCollection`)
-- [ ] Criar pacote `repository/` (AstronautRepository, SpacecraftRepository, PlanetRepository, MissionRepository)
-- [ ] Refatorar services para usar repositorios (remover `ObjectMapper`/leitura de arquivo)
-- [ ] Criar data seeding via `CommandLineRunner`
-- [ ] Configurar datasource H2 em `application.properties` (remover `app.data.path`)
-- [ ] Remover `src/main/resources/data/*.json`
-- [ ] Configurar CORS (`app.cors.allowed-origins`)
-- [ ] Adicionar Swagger/OpenAPI (springdoc-openapi 3.1.1)
-- [ ] Adicionar JaCoCo com check de 80% de linha
-- [ ] Reescrever testes de service (mock de repositories)
-- [ ] Atualizar documentacao
-- [ ] Merge `develop` -> `main` + tag `v1.0.0`
+- [x] Adicionar `spring-boot-starter-data-jpa` e H2 ao `pom.xml`
+- [x] Anotar entidades (`@Entity`, `@Id`, `@GeneratedValue`, `@ElementCollection`)
+- [x] Criar pacote `repository/` (AstronautRepository, SpacecraftRepository, PlanetRepository, MissionRepository)
+- [x] Refatorar services para usar repositorios (remover `ObjectMapper`/leitura de arquivo)
+- [x] Criar data seeding via `CommandLineRunner`
+- [x] Configurar datasource H2 em `application.properties` (remover `app.data.path`)
+- [x] Remover `src/main/resources/data/*.json`
+- [x] Configurar CORS (`app.cors.allowed-origins`)
+- [x] Adicionar Swagger/OpenAPI (springdoc-openapi 3.1.1)
+- [x] Adicionar JaCoCo com check de 80% de linha
+- [x] Reescrever testes de service (mock de repositories)
+- [x] Atualizar documentacao
+- [x] Merge `develop` -> `main` + tag `v1.0.0`
+
+### Resultado
+
+| Metrica | Valor |
+|---------|-------|
+| Total de testes | 95 |
+| Falhas | 0 |
+| Sucesso | 100% |
+| Cobertura de linhas (JaCoCo) | 97% (gate >= 80%) |
 
 ---
 

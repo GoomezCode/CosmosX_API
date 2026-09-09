@@ -32,6 +32,9 @@ build/
 ### VS Code ###
 .vscode/
 
+### H2 database ###
+/data/
+
 ### OPENCODE ###
 .opencode/
 opencode.json

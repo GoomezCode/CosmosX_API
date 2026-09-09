@@ -1,16 +1,36 @@
 package com.goomez.CosmosX.model;
 
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Mission {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private long spacecraftId;
     private long planetId;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "mission_astronauts", joinColumns = @JoinColumn(name = "mission_id"))
     private List<Long> astronauts;
+
     private String status;
     private int fuelConsumed;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "mission_resources_found", joinColumns = @JoinColumn(name = "mission_id"))
     private List<ResourceFound> resourcesFound = new ArrayList<>();
+
     private String completedAt;
 
     public Mission() {}

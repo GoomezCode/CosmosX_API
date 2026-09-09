@@ -28,8 +28,8 @@ O CosmosX API segue a arquitetura **Layered Architecture** (Arquitetura em Camad
 │                   Service                        │
 │              (Logica de Negocio)                 │
 ├─────────────────────────────────────────────────┤
-│             Data (JSON Files)                    │
-│            (Persistencia)                        │
+│                 Repository                       │
+│            (Persistencia JPA/H2)                 │
 └─────────────────────────────────────────────────┘
 ```
 
@@ -69,7 +69,7 @@ public class AstronautController {
 
 ### Camada: Service
 
-**Responsabilidade:** Conter a logica de negocio e persistencia.
+**Responsabilidade:** Conter a logica de negocio.
 
 **Localizacao:** `src/main/java/com/goomez/CosmosX/service/`
 
@@ -77,6 +77,8 @@ public class AstronautController {
 - Anotados com `@Service`
 - Recebem dependencias via construtor (injecao de dependencia)
 - Contem a logica de negocio
+- Usam repositories JPA para persistencia
+- Operacoes de escrita usam `@Transactional`
 - Lanca excecoes customizadas
 - NUNCA retornam ResponseEntity
 
@@ -84,15 +86,33 @@ public class AstronautController {
 ```java
 @Service
 public class AstronautService {
-    private final ObjectMapper mapper = new ObjectMapper();
-    private final File arquivo = new File("src/main/resources/data/astronaut.json");
+    private final AstronautRepository astronautRepository;
+
+    public AstronautService(AstronautRepository astronautRepository) {
+        this.astronautRepository = astronautRepository;
+    }
 
     public Astronaut listById(long id) {
-        return listAll().stream()
-            .filter(a -> a.getId() == id)
-            .findFirst()
+        return astronautRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Astronaut not found"));
     }
+}
+```
+
+### Camada: Repository
+
+**Responsabilidade:** Abstrair a persistencia em banco (H2).
+
+**Localizacao:** `src/main/java/com/goomez/CosmosX/repository/`
+
+**Regras:**
+- Interfaces que estendem `JpaRepository<Entidade, Long>`
+- Fornecem metodos prontos: `findAll`, `findById`, `save`, `deleteById`, `existsById`
+- NUNCA contem logica de negocio
+
+**Exemplo:**
+```java
+public interface AstronautRepository extends JpaRepository<Astronaut, Long> {
 }
 ```
 
@@ -103,27 +123,23 @@ public class AstronautService {
 **Localizacao:** `src/main/java/com/goomez/CosmosX/model/`
 
 **Regras:**
-- POJOs simples com getters/setters
-- Sem anotacoes JPA (persistencia em JSON)
+- POJOs anotados com `@Entity`
+- `@Id` + `@GeneratedValue(strategy = IDENTITY)` para o ID
+- Colecoes mapeadas com `@ElementCollection` (fetch EAGER)
+- `ResourceFound` e um `@Embeddable`
 - Construtor vazio + construtor com os campos principais
 - NUNCA contem logica de negocio
 
 **Exemplo:**
 ```java
+@Entity
 public class Astronaut {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
     private String rank;
     private int experience;
-
-    public Astronaut() {}
-
-    public Astronaut(long id, String name, String rank, int experience) {
-        this.id = id;
-        this.name = name;
-        this.rank = rank;
-        this.experience = experience;
-    }
 
     // getters e setters
 }
@@ -249,43 +265,44 @@ Controla HTTP status codes explicitamente.
 com.goomez.CosmosX/
 ├── controller/     # Controllers REST
 ├── service/        # Services de negocio
-├── model/          # Entidades
+├── repository/     # Repositorios JPA (Spring Data)
+├── model/          # Entidades JPA
 ├── dto/            # Data Transfer Objects
+├── config/         # Configuracoes (CORS, OpenAPI, Seed)
 ├── exception/      # Excecoes customizadas
 └── handler/        # Exception handlers
 ```
 
 ## Persistencia
 
-### Formato Atual: JSON Files
+### Formato Atual: JPA + H2
 
-**Localizacao:** `src/main/resources/data/`
+**Localizacao do banco:** `./data/cosmosx.mv.db` (arquivo, gitignored)
 
-**Arquivos:**
-- `astronaut.json`
-- `spacecraft.json`
-- `planet.json`
-- `mission.json`
+**Stack:**
+- `spring-boot-starter-data-jpa` (Hibernate)
+- H2 via `spring-boot-h2console` (console dev em `/h2-console`)
+- `ddl-auto=update` (schema gerado automaticamente)
 
 **Como funciona:**
-1. Service le o arquivo JSON inteiro
-2. Converte para `List<Model>` usando Jackson
-3. Opera na lista (adiciona, remove, filtra)
-4. Reescreve o arquivo JSON atualizado
+1. Entidades mapeadas com anotacoes JPA (`@Entity`, `@Id`, `@ElementCollection`)
+2. Services delegam `findAll`/`save`/`delete` aos repositories
+3. `DataSeeder` (`CommandLineRunner`) popula dados iniciais quando o banco esta vazio
+4. Escritas atomica via `@Transactional`
 
 **Exemplo:**
 ```java
 public List<Astronaut> listAll() {
-    return mapper.readValue(arquivo, new TypeReference<List<Astronaut>>() {});
+    return astronautRepository.findAll();
 }
 ```
 
-**Limitacoes:**
-- Nao suporta concorrencia (duas escritas simultaneas podem corromper dados)
-- Performance ruim para grandes volumes (leitura/escrita de arquivo inteiro)
-- Sem transacoes
+**Beneficios vs JSON:**
+- Concorrencia e transacoes suportadas
+- Consultas otimizadas pelo Hibernate
+- Schema evolutivo via `ddl-auto`
 
-**Futura migracao:** H2 ou PostgreSQL com JPA
+> Nos testes usa-se H2 **in-memory** (`src/test/resources/application.properties`) com `ddl-auto=create-drop`.
 
 ## Tratamento de Erros
 

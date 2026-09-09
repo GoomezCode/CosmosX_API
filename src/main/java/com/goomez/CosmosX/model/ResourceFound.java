@@ -1,5 +1,8 @@
 package com.goomez.CosmosX.model;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public class ResourceFound {
     private String resource;
     private int quantity;

@@ -47,6 +47,7 @@ CosmosX_API/
 │   └── skills/
 │       └── java-design-patterns/
 │           └── SKILL.md
+├── data/                         # Banco H2 (runtime, gitignored)
 ├── docs/                         # Documentacao
 │   ├── GUIA.md
 │   ├── ENDPOINTS.md
@@ -56,24 +57,23 @@ CosmosX_API/
 │   ├── main/
 │   │   ├── java/com/goomez/CosmosX/
 │   │   │   ├── CosmosXApplication.java
+│   │   │   ├── config/           # CORS, OpenAPI, DataSeeder
 │   │   │   ├── controller/       # Endpoints REST
 │   │   │   ├── service/          # Logica de negocio
-│   │   │   ├── model/            # Entidades
+│   │   │   ├── repository/       # Repositorios JPA (Spring Data)
+│   │   │   ├── model/            # Entidades JPA
 │   │   │   ├── dto/              # Request/Response
 │   │   │   ├── exception/        # Excecoes customizadas
 │   │   │   └── handler/          # Exception Handler
 │   │   └── resources/
-│   │       ├── application.properties
-│   │       └── data/             # Arquivos JSON (banco de dados)
-│   │           ├── astronaut.json
-│   │           ├── spacecraft.json
-│   │           ├── planet.json
-│   │           └── mission.json
+│   │       └── application.properties
 │   └── test/
-│       └── java/com/goomez/CosmosX/
-│           ├── CosmosXApplicationTests.java
-│           ├── controller/       # Testes de endpoint (MockMvc)
-│           └── service/          # Testes de services (Mockito)
+│       ├── java/com/goomez/CosmosX/
+│       │   ├── CosmosXApplicationTests.java
+│       │   ├── controller/       # Testes de endpoint (MockMvc)
+│       │   └── service/          # Testes de services (Mockito)
+│       └── resources/
+│           └── application.properties  # H2 in-memory p/ testes
 ├── opencode.json                 # Configuracao opencode (local, gitignored)
 ├── pom.xml                       # Dependencias Maven
 └── README.md
@@ -85,7 +85,22 @@ CosmosX_API/
 
 ```properties
 spring.application.name=CosmosX
-app.data.path=src/main/resources/data
+
+# H2 file-based (gitignored)
+spring.datasource.url=jdbc:h2:file:./data/cosmosx
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.open-in-view=false
+
+# H2 console (dev)
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console
+
+# CORS (site integrado)
+app.cors.allowed-origins=*
 ```
 
 Porta padrao: **8080**
@@ -95,16 +110,20 @@ Para alterar a porta, adicione:
 server.port=8081
 ```
 
-> `app.data.path` define o diretorio dos arquivos JSON usados como banco de dados. Nos testes, o caminho e apontado para o `@TempDir`.
+> O banco H2 e criado automaticamente em `./data/cosmosx` (gitignored). Nos testes, um H2 **in-memory** e usado via `src/test/resources/application.properties`.
 
 ### Dependencias Principais
 
 | Dependencia | Descricao |
 |-------------|-----------|
 | `spring-boot-starter-webmvc` | Framework web |
+| `spring-boot-starter-data-jpa` | Persistencia JPA (Hibernate) |
+| `spring-boot-h2console` | Banco H2 + console web |
 | `spring-boot-starter-validation` | Bean Validation |
+| `springdoc-openapi-starter-webmvc-ui` | Swagger/OpenAPI |
 | `spring-boot-devtools` | Hot reload (dev) |
 | `spring-boot-starter-webmvc-test` | Testes (JUnit 5, MockMvc, Mockito) |
+| `jacoco-maven-plugin` | Medida de cobertura (gate >= 80% linhas) |
 
 ## Execucao
 
@@ -119,15 +138,27 @@ java -jar target/CosmosX-0.0.1-SNAPSHOT.jar
 
 A aplicacao estara disponivel em: `http://localhost:8080`
 
+| Recurso | URL |
+|---------|-----|
+| API | http://localhost:8080 |
+| Swagger UI | http://localhost:8080/swagger-ui.html |
+| OpenAPI JSON | http://localhost:8080/v3/api-docs |
+| H2 Console | http://localhost:8080/h2-console |
+
 ## Testes
 
 ```bash
-# Executar todos os testes
+# Executar todos os testes + gate de cobertura (JaCoCo >= 80% linhas)
+./mvnw verify
+
+# Executar somente os testes
 ./mvnw test
 
 # Executar testes especificos
 ./mvnw test -Dtest=astronautServiceTest
 ```
+
+> Relatorio de cobertura: `target/site/jacoco/index.html`.
 
 ## Contribuindo
 

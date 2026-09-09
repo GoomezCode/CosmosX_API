@@ -1,7 +1,0 @@
-[ {
-  "id" : 1,
-  "name" : "Falcon-X",
-  "fuel" : 1000,
-  "capacity" : 5,
-  "status" : "READY"
-} ]

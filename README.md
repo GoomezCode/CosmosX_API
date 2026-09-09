@@ -2,7 +2,7 @@
 
 API REST em **Java + Spring Boot** para gerenciamento de uma agencia espacial ficticia: astronautas, naves espaciais, planetas e missoes.
 
-> Projeto em desenvolvimento. CRUD basico, simulacao de missoes e estatisticas ja implementados. Veja o [Roadmap](docs/ROADMAP.md).
+> Projeto em desenvolvimento. CRUD basico, simulacao de missoes, estatisticas e persistencia JPA/H2 ja implementados. Veja o [Roadmap](docs/ROADMAP.md).
 
 ---
 
@@ -15,31 +15,36 @@ O CosmosX API e uma API para controlar operacoes de uma frota espacial. Hoje ela
 - Planetas
 - Missoes
 
-Os dados sao persistidos em arquivos `.json` localizados em `src/main/resources/data/`.
+Os dados sao persistidos em um banco **H2** (arquivo `./data/`, gitignored) usando **JPA/Hibernate**.
 
 ## Tecnologias
 
 - Java 25
 - Spring Boot 4.1.0 (Spring Web MVC)
-- Jackson (`tools.jackson`) para serializacao/deserializacao JSON
+- Spring Data JPA (Hibernate)
+- H2 (banco embarcado + console web)
 - Bean Validation (`spring-boot-starter-validation`)
+- Swagger/OpenAPI (springdoc-openapi)
+- JaCoCo (cobertura >= 80% de linhas)
 - Maven (com Maven Wrapper)
 
 ## Estrutura do projeto
 
 ```
 src/main/java/com/goomez/CosmosX/
-├── controller/       # Endpoints REST
-├── service/          # Regras de negocio e persistencia em JSON
-├── model/            # Entidades (Astronaut, Mission, Planet, Spacecraft)
-├── dto/              # Request/Response records
-├── exception/        # Excecoes customizadas
-└── handler/          # Global Exception Handler
+├── config/          # CORS, OpenAPI, DataSeeder
+├── controller/      # Endpoints REST
+├── service/         # Regras de negocio
+├── repository/      # Repositorios JPA
+├── model/           # Entidades JPA
+├── dto/             # Request/Response records
+├── exception/       # Excecoes customizadas
+└── handler/         # Global Exception Handler
 ```
 
 ## Como executar
 
-Pre-requisitos: **Java 25** e **Maven** (ou use o wrapper incluso no projeto).
+Pre-requisitos: **JDK 25** e **Maven** (ou use o wrapper incluso no projeto).
 
 ```bash
 # clonar o repositorio
@@ -53,6 +58,20 @@ mvnw.cmd spring-boot:run   # Windows
 
 A aplicacao sobe por padrao em `http://localhost:8080`.
 
+| Recurso | URL |
+|---------|-----|
+| API | http://localhost:8080 |
+| Swagger UI | http://localhost:8080/swagger-ui.html |
+| OpenAPI JSON | http://localhost:8080/v3/api-docs |
+| H2 Console | http://localhost:8080/h2-console |
+
+## Testes
+
+```bash
+# testes + gate de cobertura (JaCoCo >= 80% linhas)
+./mvnw verify
+```
+
 ## Endpoints disponiveis
 
 | Recurso | GET all | GET by ID | POST | PUT | DELETE |
@@ -61,9 +80,10 @@ A aplicacao sobe por padrao em `http://localhost:8080`.
 | `/spacecraft` | ✅ | ✅ | ✅ | ✅ | ✅ |
 | `/planet` | ✅ | ✅ | ✅ | ✅ | ✅ |
 | `/mission` | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `/mission/{id}/start` | - | - | ✅ | - | - |
+| `/mission/history` | ✅ | - | - | - | - |
 | `/stats` | ✅ | - | - | - | - |
 | `/ranking` | ✅ | - | - | - | - |
-| `/mission/history` | ✅ | - | - | - | - |
 | `/exploration/discover` | - | - | ✅ | - | - |
 
 Documentacao detalhada: [docs/ENDPOINTS.md](docs/ENDPOINTS.md)
@@ -88,7 +108,7 @@ Documentacao detalhada: [docs/ENDPOINTS.md](docs/ENDPOINTS.md)
 - [x] DTO Pattern (Request/Response)
 - [x] Bean Validation
 - [x] Global Exception Handler
-- [x] Testes unitarios
+- [x] Testes unitarios (95 testes)
 - [x] Execucao de missoes (`/mission/{id}/start`)
 - [x] Sistema de combustivel
 - [x] Sistema de perigo / eventos aleatorios
@@ -97,6 +117,10 @@ Documentacao detalhada: [docs/ENDPOINTS.md](docs/ENDPOINTS.md)
 - [x] Ranking de astronautas (`/ranking`)
 - [x] Historico de missoes (`/mission/history`)
 - [x] Descoberta automatica de planetas (`/exploration/discover`)
+- [x] Persistencia JPA + H2
+- [x] Swagger/OpenAPI
+- [x] CORS configurado
+- [x] JaCoCo com gate de cobertura >= 80%
 
 ## Contribuindo
 

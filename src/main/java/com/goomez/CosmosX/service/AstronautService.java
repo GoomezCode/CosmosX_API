@@ -2,81 +2,49 @@ package com.goomez.CosmosX.service;
 
 import com.goomez.CosmosX.exception.ResourceNotFoundException;
 import com.goomez.CosmosX.model.Astronaut;
-import org.springframework.beans.factory.annotation.Value;
+import com.goomez.CosmosX.repository.AstronautRepository;
 import org.springframework.stereotype.Service;
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.nio.file.Paths;
 import java.util.List;
 
 @Service
 public class AstronautService {
-    private final ObjectMapper mapper = new ObjectMapper();
-    private final File arquivo;
+    private final AstronautRepository astronautRepository;
 
-    public AstronautService(@Value("${app.data.path:src/main/resources/data}") String dataPath) {
-        this.arquivo = Paths.get(dataPath, "astronaut.json").toFile();
+    public AstronautService(AstronautRepository astronautRepository) {
+        this.astronautRepository = astronautRepository;
     }
 
     public List<Astronaut> listAll() {
-        try {
-            return mapper.readValue(arquivo, new TypeReference<List<Astronaut>>() {});
-        } catch (Exception e) {
-            throw new RuntimeException("Error reading astronauts data", e);
-        }
+        return astronautRepository.findAll();
     }
 
     public Astronaut listById(long id) {
-        return listAll().stream()
-            .filter(a -> a.getId() == id)
-            .findFirst()
+        return astronautRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Astronaut not found with id: " + id));
     }
 
+    @Transactional
     public Astronaut add(Astronaut newAstronaut) {
-        try {
-            List<Astronaut> astronauts = listAll();
-            long nextId = astronauts.stream().mapToLong(Astronaut::getId).max().orElse(0) + 1;
-            newAstronaut.setId(nextId);
-            astronauts.add(newAstronaut);
-            mapper.writerWithDefaultPrettyPrinter().writeValue(arquivo, astronauts);
-            return newAstronaut;
-        } catch (Exception e) {
-            throw new RuntimeException("Error saving astronaut", e);
-        }
+        return astronautRepository.save(newAstronaut);
     }
 
+    @Transactional
     public Astronaut update(long id, Astronaut updatedAstronaut) {
-        try {
-            List<Astronaut> astronauts = listAll();
-            Astronaut existing = astronauts.stream()
-                .filter(a -> a.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("Astronaut not found with id: " + id));
-            existing.setName(updatedAstronaut.getName());
-            existing.setRank(updatedAstronaut.getRank());
-            existing.setExperience(updatedAstronaut.getExperience());
-            mapper.writerWithDefaultPrettyPrinter().writeValue(arquivo, astronauts);
-            return existing;
-        } catch (ResourceNotFoundException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Error updating astronaut", e);
-        }
+        Astronaut existing = listById(id);
+        existing.setName(updatedAstronaut.getName());
+        existing.setRank(updatedAstronaut.getRank());
+        existing.setExperience(updatedAstronaut.getExperience());
+        return astronautRepository.save(existing);
     }
 
+    @Transactional
     public boolean delete(Long id) {
-        try {
-            List<Astronaut> astronauts = listAll();
-            boolean removed = astronauts.removeIf(a -> a.getId() == id);
-            if (removed) {
-                mapper.writerWithDefaultPrettyPrinter().writeValue(arquivo, astronauts);
-            }
-            return removed;
-        } catch (Exception e) {
-            throw new RuntimeException("Error deleting astronaut", e);
+        if (!astronautRepository.existsById(id)) {
+            return false;
         }
+        astronautRepository.deleteById(id);
+        return true;
     }
 }

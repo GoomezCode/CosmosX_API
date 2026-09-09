@@ -2,6 +2,9 @@
 
 Documentacao detalhada de todos os endpoints da API.
 
+> **Documentacao interativa (Swagger UI):** http://localhost:8080/swagger-ui.html
+> **Spec OpenAPI:** http://localhost:8080/v3/api-docs
+
 ---
 
 ## Sumario
