@@ -1,16 +1,16 @@
-package com.goomez.CosmosX.Model;
+package com.goomez.CosmosX.model;
 
 import java.util.List;
 
-public class missionModel {
+public class Mission {
     private long id;
     private long planetId;
     private List<Long> astronauts;
     private String status;
 
-    public missionModel(){}
+    public Mission() {}
 
-    public missionModel(long id, long planetId, List<Long> astronauts, String status) {
+    public Mission(long id, long planetId, List<Long> astronauts, String status) {
         this.id = id;
         this.planetId = planetId;
         this.astronauts = astronauts;

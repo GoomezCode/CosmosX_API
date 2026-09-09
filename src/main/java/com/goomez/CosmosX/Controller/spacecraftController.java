@@ -1,27 +1,39 @@
-package com.goomez.CosmosX.Controller;
+package com.goomez.CosmosX.controller;
 
-import com.goomez.CosmosX.Model.spacecraftModel;
-import com.goomez.CosmosX.Service.spacecraftService;
+import com.goomez.CosmosX.dto.SpacecraftRequest;
+import com.goomez.CosmosX.dto.SpacecraftResponse;
+import com.goomez.CosmosX.model.Spacecraft;
+import com.goomez.CosmosX.service.SpacecraftService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/spacecraft")
-public class spacecraftController {
-    private final spacecraftService service;
+public class SpacecraftController {
+    private final SpacecraftService service;
 
-    public spacecraftController(spacecraftService service) {
+    public SpacecraftController(SpacecraftService service) {
         this.service = service;
     }
 
     @GetMapping
-    public List<spacecraftModel> listAll() throws Exception{
-        return service.listAll();
+    public ResponseEntity<List<SpacecraftResponse>> listAll() {
+        List<SpacecraftResponse> response = service.listAll().stream()
+            .map(s -> new SpacecraftResponse(s.getId(), s.getName(), s.getFuel(), s.getCapacity(), s.getStatus()))
+            .toList();
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public spacecraftModel createSpacecraft(@RequestBody spacecraftModel spacecraft) throws Exception{
-        return service.add(spacecraft);
+    public ResponseEntity<SpacecraftResponse> create(@Valid @RequestBody SpacecraftRequest request) {
+        Spacecraft spacecraft = new Spacecraft(0, request.name(), request.fuel(), request.capacity(), request.status());
+        Spacecraft saved = service.add(spacecraft);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new SpacecraftResponse(
+            saved.getId(), saved.getName(), saved.getFuel(), saved.getCapacity(), saved.getStatus()
+        ));
     }
 }

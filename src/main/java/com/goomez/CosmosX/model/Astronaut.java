@@ -1,14 +1,14 @@
-package com.goomez.CosmosX.Model;
+package com.goomez.CosmosX.model;
 
-public class astronautModel {
+public class Astronaut {
     private long id;
     private String name;
     private String rank;
     private int experience;
 
-    public astronautModel(){}
+    public Astronaut() {}
 
-    public astronautModel(long id, String name, String rank, int experience){
+    public Astronaut(long id, String name, String rank, int experience) {
         this.id = id;
         this.name = name;
         this.rank = rank;

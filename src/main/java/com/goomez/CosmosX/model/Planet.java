@@ -1,17 +1,17 @@
-package com.goomez.CosmosX.Model;
+package com.goomez.CosmosX.model;
 
 import java.util.List;
 
-public class planetModel {
+public class Planet {
     private long id;
     private String name;
     private int distance;
     private int dangerLevel;
     private List<String> resources;
 
-    public planetModel(){}
+    public Planet() {}
 
-    public planetModel(long id, String name, int distance, int dangerLevel, List<String> resources) {
+    public Planet(long id, String name, int distance, int dangerLevel, List<String> resources) {
         this.id = id;
         this.name = name;
         this.distance = distance;

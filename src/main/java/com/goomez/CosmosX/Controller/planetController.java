@@ -1,27 +1,39 @@
-package com.goomez.CosmosX.Controller;
+package com.goomez.CosmosX.controller;
 
-import com.goomez.CosmosX.Model.planetModel;
-import com.goomez.CosmosX.Service.planetService;
+import com.goomez.CosmosX.dto.PlanetRequest;
+import com.goomez.CosmosX.dto.PlanetResponse;
+import com.goomez.CosmosX.model.Planet;
+import com.goomez.CosmosX.service.PlanetService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/planet")
-public class planetController {
-    private final planetService service;
+public class PlanetController {
+    private final PlanetService service;
 
-    public planetController(planetService service) {
+    public PlanetController(PlanetService service) {
         this.service = service;
     }
 
     @GetMapping
-    public List<planetModel> listAll() throws Exception{
-        return service.listAll();
+    public ResponseEntity<List<PlanetResponse>> listAll() {
+        List<PlanetResponse> response = service.listAll().stream()
+            .map(p -> new PlanetResponse(p.getId(), p.getName(), p.getDistance(), p.getDangerLevel(), p.getResources()))
+            .toList();
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public planetModel createAstronaut(@RequestBody planetModel planet) throws Exception{
-        return service.add(planet);
+    public ResponseEntity<PlanetResponse> create(@Valid @RequestBody PlanetRequest request) {
+        Planet planet = new Planet(0, request.name(), request.distance(), request.dangerLevel(), request.resources());
+        Planet saved = service.add(planet);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new PlanetResponse(
+            saved.getId(), saved.getName(), saved.getDistance(), saved.getDangerLevel(), saved.getResources()
+        ));
     }
 }

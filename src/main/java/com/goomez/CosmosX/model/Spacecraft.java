@@ -1,15 +1,15 @@
-package com.goomez.CosmosX.Model;
+package com.goomez.CosmosX.model;
 
-public class spacecraftModel {
+public class Spacecraft {
     private long id;
     private String name;
     private int fuel;
     private int capacity;
     private String status;
 
-    public spacecraftModel(){}
+    public Spacecraft() {}
 
-    public spacecraftModel(long id, String name, int fuel, int capacity, String status) {
+    public Spacecraft(long id, String name, int fuel, int capacity, String status) {
         this.id = id;
         this.name = name;
         this.fuel = fuel;
