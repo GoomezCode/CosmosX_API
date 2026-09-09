@@ -27,7 +27,7 @@ Referencia tecnica consolidada: arquitetura, stack, configuracao, API, testes, b
 
 O CosmosX API e uma API REST em **Java + Spring Boot** que simula as operacoes de uma agencia espacial: gerenciamento de astronautas, naves, planetas, missoes, execucao de missoes com eventos aleatorios, estatisticas, ranking e exploracao de planetas.
 
-- **Versao atual:** v2.0.0
+- **Versao atual:** v2.0.1
 - **Licenca:** MIT
 - **Repositorio:** https://github.com/GoomezCode/CosmosX_API
 
@@ -35,7 +35,7 @@ O CosmosX API e uma API REST em **Java + Spring Boot** que simula as operacoes d
 
 | Tecnologia | Versao | Uso |
 |------------|--------|-----|
-| Java | 25 | Linguagem |
+| Java | 17+ (ate 26) | Linguagem (compilado para Java 17; testado ate o 25) |
 | Spring Boot | 4.1.0 | Framework (Spring Web MVC) |
 | Spring Data JPA | parte do Boot | Persistencia (Hibernate) |
 | H2 | parte do Boot | Banco embarcado (arquivo + in-memory em testes) |
@@ -134,7 +134,7 @@ management.endpoints.web.exposure.include=health
 
 | Variavel | Descricao |
 |----------|-----------|
-| `JAVA_HOME` | Apontar para um JDK 25 (ex.: `~/.jdks/jdk-25.0.4.1+1`) |
+| `JAVA_HOME` | Apontar para um JDK 17+ (ex.: `~/.jdks/jdk-25.0.4.1+1`). Se vazio, usa o `java` do PATH |
 
 ## API
 
@@ -215,8 +215,8 @@ Relatorio de cobertura: `target/site/jacoco/index.html`.
 ## Build e Execucao
 
 ```bash
-# Requisito: JDK 25
-export JAVA_HOME=~/.jdks/jdk-25.0.4.1+1
+# Requisito: JDK 17+
+export JAVA_HOME=~/.jdks/jdk-25.0.4.1+1   # opcional; senao usa o java do PATH
 
 # Compilar + testar + gerar o jar
 ./mvnw clean verify
@@ -224,7 +224,7 @@ export JAVA_HOME=~/.jdks/jdk-25.0.4.1+1
 # Rodar a aplicacao
 ./mvnw spring-boot:run
 # ou
-java -jar target/CosmosX-2.0.0.jar
+java -jar target/CosmosX-2.0.1.jar
 ```
 
 A aplicacao sobe em `http://localhost:8080`. O banco H2 (`./data/`) e criado automaticamente e populado pelo `DataSeeder` quando vazio.
@@ -233,7 +233,7 @@ A aplicacao sobe em `http://localhost:8080`. O banco H2 (`./data/`) e criado aut
 
 A API e stateless em relacao ao deploy (dados ficam no H2 local). Opcoes:
 
-- **Servidor compartilhado:** `java -jar CosmosX-2.0.0.jar` (porta padrao 8080). Configurar firewall para expor apenas `80/443`.
+- **Servidor compartilhado:** `java -jar CosmosX-2.0.1.jar` (porta padrao 8080). Configurar firewall para expor apenas `80/443`.
 - **Docker:** construir imagem a partir do jar (ex.: `eclipse-temurin:25-jre`) e mapear a porta 8080.
 - **Prod:** considerar `management.endpoints.web.exposure.include=health,info` e definir `app.cors.allowed-origins` com as origens reais do site.
 
@@ -251,7 +251,8 @@ A API e stateless em relacao ao deploy (dados ficam no H2 local). Opcoes:
 
 | Problema | Causa provavel | Solucao |
 |----------|----------------|---------|
-| `java: package org.springframework... does not exist` | JDK incorreto | Usar JDK 25 via `JAVA_HOME` |
+| `release version 17 not supported` ao compilar | JDK do terminal/IDE menor que 17, ou instalado apenas o JRE (sem `javac`) | `export JAVA_HOME=<JDK 17+ completo>` e rodar de novo; atualizar o SDK na IDE; instalar o pacote `-devel` do seu JDK |
+| `java: package org.springframework... does not exist` | JDK incorreto/ausente | Usar JDK 17+ via `JAVA_HOME` ou PATH |
 | `Fuel too low for this mission` (400) | Combustivel < distancia do planeta | Aumentar combustivel da nave |
 | `Mission must be PENDING to start` (400) | Missao ja executada | Criar nova missao |
 | Porta 8080 em uso | Outra aplicacao na porta | `server.port=8081` |

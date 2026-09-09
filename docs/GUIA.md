@@ -20,10 +20,13 @@ Guia completo para configuracao, execucao e contribuicao no projeto.
 
 | Ferramenta | Versao Minima | Como verificar |
 |------------|---------------|----------------|
-| Java | 25 | `java -version` |
+| Java | 17 (recomendado 21/25) | `java -version` |
 | Maven | 3.9+ | `mvn -version` |
 
 > O projeto inclui o Maven Wrapper (`mvnw` / `mvnw.cmd`), entao o Maven nao precisa estar instalado globalmente.
+> O codigo-fonte usa recursos disponiveis desde o Java 17 e `pom.xml` define `java.version=17`, entao compila/roda em qualquer JDK 17, 21 ou 25.
+>
+> **Importante:** e preciso um **JDK** (que acompanha o `javac`), nao apenas um **JRE**. Se o `java -version` funciona mas o build falha com `release version 17 not supported`, sua maquina so tem o JRE instalado — defina `JAVA_HOME` apontando para um JDK completo (veja [Solucao de Problemas](#solucao-de-problemas)).
 
 ## Instalacao
 
@@ -136,12 +139,15 @@ server.port=8081
 ## Execucao
 
 ```bash
-# Usando Maven Wrapper
+# 1. (opcional, mas recomendado) apontar para um JDK completo
+export JAVA_HOME=~/.jdks/jdk-25.0.4.1+1     # o seu JDK, com javac
+
+# 2. Usando Maven Wrapper
 ./mvnw spring-boot:run     # Linux/Mac
 mvnw.cmd spring-boot:run   # Windows
 
 # Ou apos compilar
-java -jar target/CosmosX-2.0.0.jar
+java -jar target/CosmosX-2.0.1.jar
 ```
 
 A aplicacao estara disponivel em: `http://localhost:8080`
@@ -168,6 +174,44 @@ A aplicacao estara disponivel em: `http://localhost:8080`
 ```
 
 > Relatorio de cobertura: `target/site/jacoco/index.html`.
+
+## Solucao de Problemas
+
+### Erro: `release version 17 not supported` (ou `25 not supported`)
+
+**Causa 1 — JDK menor que 17:** o terminal ou a IDE usa um `JAVA_HOME`/SDK apontando para um JDK 8/11/15, por exemplo.
+
+**Causa 2 — so o JRE instalado:** o `java` do PATH existe, mas nao vem com `javac` (o compilador). Ex.: em Fedora, apenas `java-25-openjdk` (JRE) instalado, sem o pacote `-devel` (JDK). O Maven precisa do JDK completo.
+
+**Solucao:**
+
+1. Confirme o JDK ativo no terminal:
+   ```bash
+   java -version   # deve mostrar 17, 21 ou 25
+   echo $JAVA_HOME # se vazio, o mvnw usa o java do PATH
+   ```
+2. Aponte `JAVA_HOME` para um **JDK completo** (com `javac`):
+   ```bash
+   export JAVA_HOME=~/.jdks/jdk-25.0.4.1+1   # ajuste o caminho do seu JDK
+   ./mvnw spring-boot:run
+   ```
+   No Windows, defina `JAVA_HOME` nas variaveis de ambiente e reabra o terminal.
+3. Na IDE (IntelliJ/VS Code), configure o **Project SDK** para um JDK 17+ (nao um JRE).
+4. Se nao tiver JDK nenhum instalado, instale um completo:
+   - Fedora: `sudo dnf install java-17-openjdk-devel` (ou `java-25-openjdk-devel`)
+   - Windows/macOS: baixe o Temurin 17/21/25 da Adoptium
+5. Confirme que instalou o compilador: `javac -version` deve responder (se `command not found`, e JRE/imcompleto).
+
+### Erro: porta 8080 ja em uso
+
+```bash
+server.port=8081
+```
+adicionado em `src/main/resources/application.properties`, ou encerre o processo que ocupa a porta.
+
+### Erro: `Database may be already in use`
+
+Outra instancia da aplicacao esta aberta com o mesmo banco `./data/`. Feche a instancia anterior antes de iniciar.
 
 ## Contribuindo
 
