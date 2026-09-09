@@ -1,6 +1,7 @@
 package com.goomez.CosmosX.service;
 
 import com.goomez.CosmosX.dto.MissionExecutionResponse;
+import com.goomez.CosmosX.dto.MissionHistoryResponse;
 import com.goomez.CosmosX.dto.ResourceFoundResponse;
 import com.goomez.CosmosX.exception.InvalidMissionStateException;
 import com.goomez.CosmosX.exception.ResourceNotFoundException;
@@ -9,6 +10,7 @@ import com.goomez.CosmosX.model.Mission;
 import com.goomez.CosmosX.model.MissionEvent;
 import com.goomez.CosmosX.model.MissionStatus;
 import com.goomez.CosmosX.model.Planet;
+import com.goomez.CosmosX.model.ResourceFound;
 import com.goomez.CosmosX.model.Spacecraft;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,6 +133,9 @@ public class MissionService {
             case SUCCESS -> {
                 mission.setStatus(MissionStatus.SUCCESS.name());
                 resourcesFound = resourceService.generate(planet);
+                mission.setResourcesFound(resourcesFound.stream()
+                    .map(r -> new ResourceFound(r.resource(), r.quantity()))
+                    .toList());
                 events.add("Mission completed successfully");
                 resourcesFound.forEach(r -> events.add("Resources collected: " + r.resource() + " (" + r.quantity() + ")"));
             }
@@ -159,9 +165,41 @@ public class MissionService {
         spacecraft.setFuel(spacecraft.getFuel() - fuelConsumed);
         spacecraftService.update(spacecraft.getId(), spacecraft);
 
+        mission.setFuelConsumed(fuelConsumed);
+        mission.setCompletedAt(LocalDateTime.now().toString());
+
         save(mission);
 
         return new MissionExecutionResponse(mission.getId(), mission.getStatus(), fuelConsumed, resourcesFound, events);
+    }
+
+    public List<MissionHistoryResponse> listHistory(String status, Long planetId) {
+        return listAll().stream()
+            .filter(m -> status == null || status.isBlank() || m.getStatus().equalsIgnoreCase(status))
+            .filter(m -> planetId == null || m.getPlanetId() == planetId)
+            .map(this::toHistory)
+            .toList();
+    }
+
+    private MissionHistoryResponse toHistory(Mission mission) {
+        Planet planet = planetService.listById(mission.getPlanetId());
+        List<String> astronautNames = mission.getAstronauts() == null ? List.of()
+            : mission.getAstronauts().stream()
+                .map(id -> astronautService.listById(id).getName())
+                .toList();
+        List<String> resourceNames = mission.getResourcesFound() == null ? List.of()
+            : mission.getResourcesFound().stream()
+                .map(ResourceFound::getResource)
+                .toList();
+        return new MissionHistoryResponse(
+            mission.getId(),
+            planet.getName(),
+            astronautNames,
+            mission.getStatus(),
+            mission.getFuelConsumed(),
+            resourceNames,
+            mission.getCompletedAt()
+        );
     }
 
     private void save(Mission mission) {

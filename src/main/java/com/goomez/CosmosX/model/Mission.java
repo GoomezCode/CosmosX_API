@@ -1,5 +1,6 @@
 package com.goomez.CosmosX.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Mission {
@@ -8,6 +9,9 @@ public class Mission {
     private long planetId;
     private List<Long> astronauts;
     private String status;
+    private int fuelConsumed;
+    private List<ResourceFound> resourcesFound = new ArrayList<>();
+    private String completedAt;
 
     public Mission() {}
 
@@ -57,5 +61,29 @@ public class Mission {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getFuelConsumed() {
+        return fuelConsumed;
+    }
+
+    public void setFuelConsumed(int fuelConsumed) {
+        this.fuelConsumed = fuelConsumed;
+    }
+
+    public List<ResourceFound> getResourcesFound() {
+        return resourcesFound;
+    }
+
+    public void setResourcesFound(List<ResourceFound> resourcesFound) {
+        this.resourcesFound = resourcesFound;
+    }
+
+    public String getCompletedAt() {
+        return completedAt;
+    }
+
+    public void setCompletedAt(String completedAt) {
+        this.completedAt = completedAt;
     }
 }

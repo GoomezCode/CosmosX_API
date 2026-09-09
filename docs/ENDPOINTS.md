@@ -10,6 +10,9 @@ Documentacao detalhada de todos os endpoints da API.
 2. [Naves](#naves--spacecraft)
 3. [Planetas](#planetas--planet)
 4. [Missoes](#missoes--mission)
+5. [Estatisticas](#estatisticas--stats)
+6. [Ranking](#ranking--ranking)
+7. [Exploracao](#exploracao--exploration)
 
 ---
 
@@ -604,6 +607,142 @@ DELETE /mission/{id}
 | id | Long | Sim | ID da missao |
 
 **Response 204 No Content**
+
+### Historico (Fase 4)
+
+```
+GET /mission/history
+```
+
+**Query Parameters:**
+| Parametro | Tipo | Obrigatorio | Descricao |
+|-----------|------|-------------|-----------|
+| status | String | Nao | Filtrar por status (SUCCESS, FAILED) |
+| planetId | Long | Nao | Filtrar por planeta alvo |
+
+**Response 200 OK:**
+```json
+[
+  {
+    "id": 1,
+    "planetName": "Zorion",
+    "astronauts": ["Daniel", "Laura"],
+    "status": "SUCCESS",
+    "fuelConsumed": 500,
+    "resourcesFound": ["Iron", "Water"],
+    "completedAt": "2026-09-09T14:30:00"
+  }
+]
+```
+
+---
+
+## Estatisticas `/stats`
+
+### Obter estatisticas (Fase 4)
+
+```
+GET /stats
+```
+
+**Response 200 OK:**
+```json
+{
+  "totalMissions": 2,
+  "successes": 2,
+  "failures": 0,
+  "successRate": 100.0,
+  "resourcesCollected": 75,
+  "topResource": "Iron"
+}
+```
+
+> Recursos apenas de missoes `SUCCESS`; `successRate` com 2 casas decimais; `topResource` e `null` quando nao ha recursos.
+
+---
+
+## Ranking `/ranking`
+
+### Obter ranking de astronautas (Fase 4)
+
+```
+GET /ranking
+```
+
+**Response 200 OK:**
+```json
+[
+  {
+    "name": "Daniel",
+    "rank": "Commander",
+    "experience": 5200,
+    "missionsCompleted": 15
+  },
+  {
+    "name": "Laura",
+    "rank": "Pilot",
+    "experience": 3800,
+    "missionsCompleted": 12
+  }
+]
+```
+
+> Ordenado por `experience` decrescente; `missionsCompleted` conta apenas missoes `SUCCESS` da qual o astronauta participou.
+
+---
+
+## Exploracao `/exploration`
+
+### Descobrir planeta (Fase 4)
+
+```
+POST /exploration/discover
+```
+
+Simula a descoberta de um planeta, gerando recursos de acordo com o nivel de perigo.
+
+**Request Body:**
+```json
+{
+  "name": "Nebulon-7",
+  "distance": 1200,
+  "dangerLevel": 6
+}
+```
+
+**Campos Obrigatorios:**
+| Campo | Tipo | Validacao | Descricao |
+|-------|------|-----------|-----------|
+| name | String | @NotBlank | Nome do planeta |
+| distance | int | @Min(0) | Distancia em unidades espaciais |
+| dangerLevel | int | @Min(0), @Max(10) | Nivel de perigo |
+
+**Regras de geracao de recursos:**
+- Sempre: Iron, Water, Stone (pool basico)
+- dangerLevel >= 3: + Gold, Titanium, Silicon
+- dangerLevel >= 6: + Crystal, Platinum, Uranium
+- Quantidade gerada: 1 a 3 recursos unicos por descoberta
+
+**Response 201 Created:**
+```json
+{
+  "id": 5,
+  "name": "Nebulon-7",
+  "distance": 1200,
+  "dangerLevel": 6,
+  "resources": ["Crystal", "Titanium"],
+  "discoveredAt": "2026-09-09T15:00:00"
+}
+```
+
+**Response 400 Bad Request (dangerLevel > 10):**
+```json
+{
+  "timestamp": "2026-09-09T10:00:00",
+  "status": 400,
+  "message": "dangerLevel: must be less than or equal to 10"
+}
+```
 
 ---
 

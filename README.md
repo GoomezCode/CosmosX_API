@@ -2,7 +2,7 @@
 
 API REST em **Java + Spring Boot** para gerenciamento de uma agencia espacial ficticia: astronautas, naves espaciais, planetas e missoes.
 
-> Projeto em desenvolvimento. O CRUD basico ja funciona, mas a simulacao de exploracao espacial ainda nao foi implementada. Veja o [Roadmap](docs/ROADMAP.md).
+> Projeto em desenvolvimento. CRUD basico, simulacao de missoes e estatisticas ja implementados. Veja o [Roadmap](docs/ROADMAP.md).
 
 ---
 
@@ -39,7 +39,7 @@ src/main/java/com/goomez/CosmosX/
 
 ## Como executar
 
-Pre-requisitos: **Java 26** e **Maven** (ou use o wrapper incluso no projeto).
+Pre-requisitos: **Java 25** e **Maven** (ou use o wrapper incluso no projeto).
 
 ```bash
 # clonar o repositorio
@@ -61,6 +61,10 @@ A aplicacao sobe por padrao em `http://localhost:8080`.
 | `/spacecraft` | ✅ | ✅ | ✅ | ✅ | ✅ |
 | `/planet` | ✅ | ✅ | ✅ | ✅ | ✅ |
 | `/mission` | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `/stats` | ✅ | - | - | - | - |
+| `/ranking` | ✅ | - | - | - | - |
+| `/mission/history` | ✅ | - | - | - | - |
+| `/exploration/discover` | - | - | ✅ | - | - |
 
 Documentacao detalhada: [docs/ENDPOINTS.md](docs/ENDPOINTS.md)
 
@@ -89,10 +93,10 @@ Documentacao detalhada: [docs/ENDPOINTS.md](docs/ENDPOINTS.md)
 - [x] Sistema de combustivel
 - [x] Sistema de perigo / eventos aleatorios
 - [x] Geracao de recursos ao fim da missao
-- [ ] Endpoint de estatisticas (`/stats`)
-- [ ] Ranking de astronautas
-- [ ] Historico de missoes
-- [ ] Descoberta automatica de planetas
+- [x] Endpoint de estatisticas (`/stats`)
+- [x] Ranking de astronautas (`/ranking`)
+- [x] Historico de missoes (`/mission/history`)
+- [x] Descoberta automatica de planetas (`/exploration/discover`)
 
 ## Contribuindo
 

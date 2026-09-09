@@ -8,6 +8,7 @@ public class Planet {
     private int distance;
     private int dangerLevel;
     private List<String> resources;
+    private String discoveredAt;
 
     public Planet() {}
 
@@ -57,5 +58,13 @@ public class Planet {
 
     public void setResources(List<String> resources) {
         this.resources = resources;
+    }
+
+    public String getDiscoveredAt() {
+        return discoveredAt;
+    }
+
+    public void setDiscoveredAt(String discoveredAt) {
+        this.discoveredAt = discoveredAt;
     }
 }

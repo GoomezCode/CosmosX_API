@@ -21,7 +21,7 @@ Roadmap de implementacao do projeto CosmosX API.
 | 1 | CRUD Completo | Alta | ✅ Concluida |
 | 2 | Testes Unitarios | Alta | ✅ Concluida |
 | 3 | Simulacao de Missoes | Alta | ✅ Concluida |
-| 4 | Estatisticas e Ranking | Media | Pendente |
+| 4 | Estatisticas e Ranking | Media | ✅ Concluida |
 
 ---
 
@@ -220,7 +220,9 @@ Se a missao for bem-sucedida:
 
 ## Fase 4 - Estatisticas e Ranking
 
-**Objetivo:** Fornecer dados agregados e rankings.
+**Objetivo:** Fornecer dados agregados e rankings. ✅ Concluida
+
+> **Decisao de design:** missao passou a persistir `fuelConsumed`, `resourcesFound` e `completedAt`; planeta ganhou `discoveredAt`. O historico usa `/mission/history` (singular) para manter consistencia com a API.
 
 ### Novos Endpoints
 
@@ -259,7 +261,7 @@ GET /ranking
 #### 4.3 Historico de Missoes
 
 ```
-GET /missions/history
+GET /mission/history
 ```
 
 **Query Parameters:**
@@ -314,13 +316,22 @@ POST /exploration/discover
 
 ### Tarefas
 
-- [ ] Criar `StatsService` com metodos de agregacao
-- [ ] Criar endpoint `GET /stats`
-- [ ] Criar endpoint `GET /ranking`
-- [ ] Criar endpoint `GET /missions/history`
-- [ ] Criar `ExplorationService` para descoberta de planetas
-- [ ] Criar endpoint `POST /exploration/discover`
-- [ ] Atualizar documentacao
+- [x] Persistir resultados de execucao na `Mission` (`fuelConsumed`, `resourcesFound`, `completedAt`)
+- [x] Criar `StatsService` com metodos de agregacao
+- [x] Criar endpoint `GET /stats`
+- [x] Criar `RankingService` e endpoint `GET /ranking`
+- [x] Criar endpoint `GET /mission/history`
+- [x] Criar `ExplorationService` para descoberta de planetas
+- [x] Criar endpoint `POST /exploration/discover`
+- [x] Atualizar documentacao
+
+### Resultado
+
+| Metrica | Valor |
+|---------|-------|
+| Total de testes | 95 |
+| Falhas | 0 |
+| Sucesso | 100% |
 
 ---
 

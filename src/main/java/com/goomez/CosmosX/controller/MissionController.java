@@ -1,6 +1,7 @@
 package com.goomez.CosmosX.controller;
 
 import com.goomez.CosmosX.dto.MissionExecutionResponse;
+import com.goomez.CosmosX.dto.MissionHistoryResponse;
 import com.goomez.CosmosX.dto.MissionRequest;
 import com.goomez.CosmosX.dto.MissionResponse;
 import com.goomez.CosmosX.dto.MissionUpdateRequest;
@@ -60,6 +61,13 @@ public class MissionController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<List<MissionHistoryResponse>> history(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) Long planetId) {
+        return ResponseEntity.ok(service.listHistory(status, planetId));
     }
 
     @PostMapping("/{id}/start")

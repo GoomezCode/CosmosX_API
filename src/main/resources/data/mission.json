@@ -4,4 +4,19 @@
   "planetId" : 1,
   "astronauts" : [ 1, 2 ],
   "status" : "PENDING"
+}, {
+  "id" : 2,
+  "spacecraftId" : 1,
+  "planetId" : 1,
+  "astronauts" : [ 1 ],
+  "status" : "SUCCESS",
+  "fuelConsumed" : 500,
+  "resourcesFound" : [ {
+    "resource" : "Iron",
+    "quantity" : 25
+  }, {
+    "resource" : "Water",
+    "quantity" : 50
+  } ],
+  "completedAt" : "2026-09-09T14:30:00"
 } ]

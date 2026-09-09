@@ -145,12 +145,16 @@ class MissionServiceTest {
 
         MissionExecutionResponse response = service.executeMission(1);
 
+        Mission persisted = service.listById(1);
         assertEquals("SUCCESS", response.status());
         assertEquals(500, response.fuelConsumed());
         assertEquals(1, response.resourcesFound().size());
         assertEquals("Iron", response.resourcesFound().get(0).resource());
         assertEquals(List.of("Mission completed successfully", "Resources collected: Iron (25)"), response.events());
-        assertEquals("SUCCESS", service.listById(1).getStatus());
+        assertEquals("SUCCESS", persisted.getStatus());
+        assertEquals(500, persisted.getFuelConsumed());
+        assertEquals("Iron", persisted.getResourcesFound().get(0).getResource());
+        assertNotNull(persisted.getCompletedAt());
         verify(spacecraftService).update(1, spacecraft);
         assertEquals(500, spacecraft.getFuel());
     }
@@ -230,5 +234,78 @@ class MissionServiceTest {
         assertEquals("FAILED", response.status());
         assertEquals(List.of("Cosmic storm intercepted", "Resources lost"), response.events());
         assertEquals("FAILED", service.listById(1).getStatus());
+    }
+
+    @Test
+    @DisplayName("listHistory returns all missions with resolved names")
+    void listHistory_returnsAll() throws Exception {
+        writeMissions(historyJson());
+        stubHistoryDependencies();
+
+        var history = service.listHistory(null, null);
+
+        assertEquals(2, history.size());
+        assertEquals("Zorion", history.get(0).planetName());
+        assertEquals(List.of("Daniel", "Laura"), history.get(0).astronauts());
+        assertEquals(500, history.get(0).fuelConsumed());
+        assertEquals(List.of("Iron", "Water"), history.get(0).resourcesFound());
+        assertEquals("2026-09-09T14:30:00", history.get(0).completedAt());
+    }
+
+    @Test
+    @DisplayName("listHistory filters by status")
+    void listHistory_filtersByStatus() throws Exception {
+        writeMissions(historyJson());
+        stubHistoryDependencies();
+
+        var history = service.listHistory("FAILED", null);
+
+        assertEquals(1, history.size());
+        assertEquals("FAILED", history.get(0).status());
+    }
+
+    @Test
+    @DisplayName("listHistory filters by planetId")
+    void listHistory_filtersByPlanetId() throws Exception {
+        writeMissions(historyJson());
+        Planet planet2 = new Planet(2, "Mars-X", 600, 4, List.of("Gold"));
+        when(planetService.listById(2)).thenReturn(planet2);
+        when(astronautService.listById(1)).thenReturn(new Astronaut(1, "Daniel", "Commander", 1200));
+
+        var history = service.listHistory(null, 2L);
+
+        assertEquals(1, history.size());
+        assertEquals("Mars-X", history.get(0).planetName());
+    }
+
+    private void stubHistoryDependencies() {
+        Planet planet1 = new Planet(1, "Zorion", 500, 1, List.of("Iron", "Water"));
+        Planet planet2 = new Planet(2, "Mars-X", 600, 4, List.of("Gold"));
+        when(planetService.listById(1)).thenReturn(planet1);
+        when(planetService.listById(2)).thenReturn(planet2);
+        when(astronautService.listById(1)).thenReturn(new Astronaut(1, "Daniel", "Commander", 1200));
+        when(astronautService.listById(2)).thenReturn(new Astronaut(2, "Laura", "Pilot", 800));
+    }
+
+    private void writeMissions(String json) throws Exception {
+        Files.writeString(Path.of(tempDir.toString(), "mission.json"), json);
+    }
+
+    private String historyJson() {
+        return """
+            [
+              { "id": 1, "spacecraftId": 1, "planetId": 1, "astronauts": [1, 2], "status": "SUCCESS",
+                "fuelConsumed": 500,
+                "resourcesFound": [
+                  { "resource": "Iron", "quantity": 25 },
+                  { "resource": "Water", "quantity": 50 }
+                ],
+                "completedAt": "2026-09-09T14:30:00" },
+              { "id": 2, "spacecraftId": 1, "planetId": 2, "astronauts": [1], "status": "FAILED",
+                "fuelConsumed": 600,
+                "resourcesFound": [],
+                "completedAt": "2026-09-09T15:00:00" }
+            ]
+            """;
     }
 }

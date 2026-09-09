@@ -1,6 +1,7 @@
 package com.goomez.CosmosX.controller;
 
 import com.goomez.CosmosX.dto.MissionExecutionResponse;
+import com.goomez.CosmosX.dto.MissionHistoryResponse;
 import com.goomez.CosmosX.dto.ResourceFoundResponse;
 import com.goomez.CosmosX.model.Mission;
 import com.goomez.CosmosX.service.MissionService;
@@ -130,5 +131,25 @@ class MissionControllerTest {
             .andExpect(jsonPath("$.resourcesFound[0].resource").value("Iron"))
             .andExpect(jsonPath("$.resourcesFound[0].quantity").value(25))
             .andExpect(jsonPath("$.events[0]").value("Mission completed successfully"));
+    }
+
+    @Test
+    @DisplayName("GET /mission/history returns mission history")
+    void history_returnsMissions() throws Exception {
+        when(service.listHistory("SUCCESS", 1L)).thenReturn(List.of(
+            new MissionHistoryResponse(1L, "Zorion", List.of("Daniel", "Laura"), "SUCCESS", 500, List.of("Iron", "Water"), "2026-09-09T14:30:00")
+        ));
+
+        mockMvc.perform(get("/mission/history")
+                .param("status", "SUCCESS")
+                .param("planetId", "1"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].id").value(1))
+            .andExpect(jsonPath("$[0].planetName").value("Zorion"))
+            .andExpect(jsonPath("$[0].astronauts[0]").value("Daniel"))
+            .andExpect(jsonPath("$[0].status").value("SUCCESS"))
+            .andExpect(jsonPath("$[0].fuelConsumed").value(500))
+            .andExpect(jsonPath("$[0].resourcesFound[0]").value("Iron"))
+            .andExpect(jsonPath("$[0].completedAt").value("2026-09-09T14:30:00"));
     }
 }
