@@ -27,7 +27,7 @@ Referencia tecnica consolidada: arquitetura, stack, configuracao, API, testes, b
 
 O CosmosX API e uma API REST em **Java + Spring Boot** que simula as operacoes de uma agencia espacial: gerenciamento de astronautas, naves, planetas, missoes, execucao de missoes com eventos aleatorios, estatisticas, ranking e exploracao de planetas.
 
-- **Versao atual:** v2.0.1
+- **Versao atual:** v2.0.2
 - **Licenca:** MIT
 - **Repositorio:** https://github.com/GoomezCode/CosmosX_API
 
@@ -224,20 +224,20 @@ export JAVA_HOME=~/.jdks/jdk-25.0.4.1+1   # opcional; senao usa o java do PATH
 # Rodar a aplicacao
 ./mvnw spring-boot:run
 # ou
-java -jar target/CosmosX-2.0.1.jar
+java -jar target/CosmosX-2.0.2.jar
 ```
 
 A aplicacao sobe em `http://localhost:8080`. O banco H2 (`./data/`) e criado automaticamente e populado pelo `DataSeeder` quando vazio.
 
 ## Deploy
 
-A API e stateless em relacao ao deploy (dados ficam no H2 local). Opcoes:
+A API esta publicada em producao em **https://cosmosx-api.onrender.com** (detalhes no [DEPLOY.md](DEPLOY.md)).
 
-- **Servidor compartilhado:** `java -jar CosmosX-2.0.1.jar` (porta padrao 8080). Configurar firewall para expor apenas `80/443`.
-- **Docker:** construir imagem a partir do jar (ex.: `eclipse-temurin:25-jre`) e mapear a porta 8080.
-- **Prod:** considerar `management.endpoints.web.exposure.include=health,info` e definir `app.cors.allowed-origins` com as origens reais do site.
+- **Render (Docker):** o repositorio contem `Dockerfile` multi-stage — build com `maven:3.9-eclipse-temurin-17` e runtime `eclipse-temurin:17-jre`. O Render auto-deploya a cada push em `main`, usando `--server.port=$PORT` (porta injetada pelo Render).
+- **Servidor compartilhado/VPS:** `java -jar target/CosmosX-2.0.2.jar` (porta padrao 8080). Configurar firewall para expor apenas `80/443` (e um proxy para HTTPS, ex.: Caddy/Nginx).
+- **Prod:** definir `app.cors.allowed-origins` com as origens reais do site e considerar banco externo (PostgreSQL/MySQL) via `spring.datasource.*`.
 
-> Nota: para uso em producao com varios usuarios, migrar para um banco externo (PostgreSQL/MySQL) via `spring.datasource.*`.
+> Nota: no tier gratuito do Render o disco e efemero — os dados do H2 resetam a cada deploy (o `DataSeeder` repopula). Para persistencia real 24/7, usar uma VM com disco duravel (ex.: Oracle Cloud Always Free).
 
 ## Manutencao
 

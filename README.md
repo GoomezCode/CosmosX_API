@@ -1,7 +1,7 @@
 <h1 align="center">CosmosX API</h1>
 
 <p align="center">
-  <img alt="Versao" src="https://img.shields.io/badge/versao-v2.0.1-blue">
+  <img alt="Versao" src="https://img.shields.io/badge/versao-v2.0.2-blue">
   <img alt="Status" src="https://img.shields.io/badge/status-concluido-success">
   <img alt="Testes" src="https://img.shields.io/badge/testes-98%20passaram-brightgreen">
   <img alt="Cobertura" src="https://img.shields.io/badge/cobertura-%3E%3D97%25-brightgreen">
@@ -12,7 +12,7 @@
 
 API REST em **Java + Spring Boot** para gerenciamento de uma agencia espacial ficticia: astronautas, naves espaciais, planetas, missoes, simulacao de missoes, estatisticas e exploracao.
 
-> ✅ **Projeto CONCLUIDO.** Todas as fases do [Roadmap](docs/ROADMAP.md) foram implementadas e entregues na tag `v2.0.1`.
+> ✅ **Projeto CONCLUIDO.** Todas as fases do [Roadmap](docs/ROADMAP.md) foram implementadas e entregues; a versao atual esta publicada na tag `v2.0.2` e rodando em producao.
 
 ---
 
@@ -84,6 +84,18 @@ A aplicacao sobe por padrao em `http://localhost:8080`.
 | H2 Console | http://localhost:8080/h2-console |
 | Health Check | http://localhost:8080/actuator/health |
 
+## Producao
+
+A API esta publicada e rodando no Render:
+
+| Recurso | URL |
+|---------|-----|
+| API | https://cosmosx-api.onrender.com |
+| Swagger UI | https://cosmosx-api.onrender.com/swagger-ui.html |
+| Health Check | https://cosmosx-api.onrender.com/actuator/health |
+
+> No tier gratuito do Render o disco e efemero: os dados do H2 resetam a cada deploy (o `DataSeeder` repopula). Instrucoes, limites e troubleshooting em [docs/DEPLOY.md](docs/DEPLOY.md).
+
 ## Testes
 
 ```bash
@@ -119,6 +131,7 @@ Documentacao detalhada: [docs/ENDPOINTS.md](docs/ENDPOINTS.md)
 | [ROADMAP.md](docs/ROADMAP.md) | Roadmap de implementacao (Fases 1-6) |
 | [ARQUITETURA.md](docs/ARQUITETURA.md) | Padroes e arquitetura |
 | [TECHNICAL_REFERENCE.md](docs/TECHNICAL_REFERENCE.md) | Referencia tecnica consolidada |
+| [DEPLOY.md](docs/DEPLOY.md) | Deploy em producao (Render/Docker) |
 | [CHANGELOG.md](CHANGELOG.md) | Historico de versoes |
 
 ## Status

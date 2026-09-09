@@ -147,7 +147,7 @@ export JAVA_HOME=~/.jdks/jdk-25.0.4.1+1     # o seu JDK, com javac
 mvnw.cmd spring-boot:run   # Windows
 
 # Ou apos compilar
-java -jar target/CosmosX-2.0.1.jar
+java -jar target/CosmosX-2.0.2.jar
 ```
 
 A aplicacao estara disponivel em: `http://localhost:8080`

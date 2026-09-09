@@ -6,6 +6,23 @@ O formato segue as convencoes de [Keep a Changelog](https://keepachangelog.com/p
 
 ---
 
+## [v2.0.2] - 2026-09-09
+
+Publicacao em producao: API rodando no Render.
+
+### Adicionado
+- `Dockerfile` multi-stage (build com Maven na imagem `maven:3.9-eclipse-temurin-17`; runtime `eclipse-temurin:17-jre`) com suporte a `PORT` do platform as a service
+- `.dockerignore` para manter o contexto da imagem leve
+- `docs/DEPLOY.md` com o passo a passo de publicacao no Render (Docker), health check e troubleshooting
+
+### Alterado
+- Versao do projeto para `2.0.2` (era `2.0.1`)
+- Versao da API Swagger/OpenAPI para `v2.0.2`
+- `mvnw` marcado como executavel no Git (modo `100755`) para funcionar em deploy/CI do Render
+- `README.md` com secao de producao apontando para a URL publicada
+
+---
+
 ## [v2.0.1] - 2026-09-09
 
 Compatibilidade de build: permite iniciar o projeto com qualquer JDK 17, 21 ou 25.

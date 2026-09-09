@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.goomez</groupId>
 	<artifactId>CosmosX</artifactId>
-	<version>2.0.1</version>
+	<version>2.0.2</version>
 	<name>CosmosX API</name>
 	<description>REST API for a fictional space agency: astronauts, spacecraft, planets, missions, statistics and exploration.</description>
 	<url>https://github.com/GoomezCode/CosmosX_API</url>
@@ -31,7 +31,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/GoomezCode/CosmosX_API.git</connection>
 		<developerConnection>scm:git:git@github.com:GoomezCode/CosmosX_API.git</developerConnection>
-		<tag>v2.0.1</tag>
+		<tag>v2.0.2</tag>
 		<url>https://github.com/GoomezCode/CosmosX_API</url>
 	</scm>
 	<properties>
