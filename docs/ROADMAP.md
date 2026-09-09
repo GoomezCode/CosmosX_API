@@ -20,7 +20,7 @@ Roadmap de implementacao do projeto CosmosX API.
 |------|-----------|------------|--------|
 | 1 | CRUD Completo | Alta | ✅ Concluida |
 | 2 | Testes Unitarios | Alta | ✅ Concluida |
-| 3 | Simulacao de Missoes | Alta | Pendente |
+| 3 | Simulacao de Missoes | Alta | ✅ Concluida |
 | 4 | Estatisticas e Ranking | Media | Pendente |
 
 ---
@@ -116,12 +116,14 @@ Roadmap de implementacao do projeto CosmosX API.
 
 ## Fase 3 - Simulacao de Missoes
 
-**Objetivo:** Transformar o cadastro de missoes em uma simulacao real de exploracao espacial.
+**Objetivo:** Transformar o cadastro de missoes em uma simulacao real de exploracao espacial. ✅ Concluida
+
+> **Decisao de design:** a entidade `Mission` passou a ter o campo `spacecraftId` (nave responsavel pela missao). O endpoint usa `/mission/{id}/start` para manter consistencia com o restante da API.
 
 ### Novo Endpoint
 
 ```
-POST /missions/{id}/start
+POST /mission/{id}/start
 ```
 
 ### Funcionalidades
@@ -157,7 +159,9 @@ Cada planeta tem um `dangerLevel` (0-10). Ao iniciar a missao:
 | Sucesso | 60% - (dangerLevel * 5%) | Missao completa |
 | Falha Mecanica | 15% | Missao falha, nave danificada |
 | Ataque Alienigena | 15% | Missao falha, astronautas perdem XP |
-| Tempestade Cosmica | 10% | Missao falha, perda de recursos |
+| Tempestade Cosmica | 10% + remanescente | Missao falha, perda de recursos |
+
+> **Regra implementada:** `roll` de 1 a 100. Sucesso se `roll <= 60 - dangerLevel*5` (minimo 0). Janelas fixas de 15/15/10 para falha mecanica, ataque alienigena e tempestade cosmica. O restante do roll vai para a tempestade cosmica, tornando planetas perigosos mais arriscados.
 
 #### 3.4 Geracao de Recursos
 
@@ -194,14 +198,23 @@ Se a missao for bem-sucedida:
 
 ### Tarefas
 
-- [ ] Criar enum `MissionStatus` (PENDING, IN_PROGRESS, SUCCESS, FAILED)
-- [ ] Criar enum `MissionEvent` (SUCCESS, MECHANICAL_FAILURE, ALIEN_ATTACK, COSMIC_STORM)
-- [ ] Criar `MissionService.executeMission(Long id)`
-- [ ] Criar `FuelService` para validacao de combustivel
-- [ ] Criar `DangerService` para calculo de eventos aleatorios
-- [ ] Criar `ResourceService` para geracao de recursos
-- [ ] Criar endpoint `POST /missions/{id}/start`
-- [ ] Atualizar documentacao
+- [x] Adicionar `spacecraftId` na entidade `Mission` (+ DTOs e JSON)
+- [x] Criar enum `MissionStatus` (PENDING, IN_PROGRESS, SUCCESS, FAILED)
+- [x] Criar enum `MissionEvent` (SUCCESS, MECHANICAL_FAILURE, ALIEN_ATTACK, COSMIC_STORM)
+- [x] Criar `MissionService.executeMission(Long id)`
+- [x] Criar `FuelService` para validacao de combustivel
+- [x] Criar `DangerService` para calculo de eventos aleatorios
+- [x] Criar `ResourceService` para geracao de recursos
+- [x] Criar endpoint `POST /mission/{id}/start`
+- [x] Atualizar documentacao
+
+### Resultado
+
+| Metrica | Valor |
+|---------|-------|
+| Total de testes | 79 |
+| Falhas | 0 |
+| Sucesso | 100% |
 
 ---
 

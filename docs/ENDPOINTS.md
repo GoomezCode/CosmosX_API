@@ -432,6 +432,7 @@ GET /mission
 [
   {
     "id": 1,
+    "spacecraftId": 1,
     "planetId": 1,
     "astronauts": [1, 2],
     "status": "PENDING"
@@ -454,6 +455,7 @@ GET /mission/{id}
 ```json
 {
   "id": 1,
+  "spacecraftId": 1,
   "planetId": 1,
   "astronauts": [1, 2],
   "status": "PENDING"
@@ -478,6 +480,7 @@ POST /mission
 **Request Body:**
 ```json
 {
+  "spacecraftId": 1,
   "planetId": 1,
   "astronauts": [1, 2]
 }
@@ -486,6 +489,7 @@ POST /mission
 **Campos Obrigatorios:**
 | Campo | Tipo | Validacao | Descricao |
 |-------|------|-----------|-----------|
+| spacecraftId | Long | @NotNull | ID da nave designada |
 | planetId | Long | @NotNull | ID do planeta alvo |
 | astronauts | List\<Long\> | @NotEmpty | IDs dos astronautas participantes |
 
@@ -493,6 +497,7 @@ POST /mission
 ```json
 {
   "id": 1,
+  "spacecraftId": 1,
   "planetId": 1,
   "astronauts": [1, 2],
   "status": "PENDING"
@@ -515,6 +520,7 @@ PUT /mission/{id}
 **Request Body:**
 ```json
 {
+  "spacecraftId": 1,
   "planetId": 2,
   "astronauts": [1, 3],
   "status": "PENDING"
@@ -525,11 +531,66 @@ PUT /mission/{id}
 ```json
 {
   "id": 1,
+  "spacecraftId": 1,
   "planetId": 2,
   "astronauts": [1, 3],
   "status": "PENDING"
 }
 ```
+
+### Executar (Fase 3)
+
+```
+POST /mission/{id}/start
+```
+
+Executa a simulacao de exploracao espacial. A missao deve estar com status `PENDING`.
+
+**Parametros:**
+| Parametro | Tipo | Obrigatorio | Descricao |
+|-----------|------|-------------|-----------|
+| id | Long | Sim | ID da missao |
+
+**Steps internos:**
+1. Valida combustivel da nave (`fuel >= distance`)
+2. Calcula consumo (`fuelConsumed = distance * dangerLevel`)
+3. Resolve evento de perigo
+4. Gera recursos (se sucesso)
+5. Atualiza status (`SUCCESS`/`FAILED`) e consumos
+
+**Regra de perigo (roll 1-100):** sucesso se `roll <= 60 - dangerLevel*5`; janelas de 15% (falha mecanica), 15% (ataque alienigena) e 10% + remanescente (tempestade cosmica).
+
+**Response 200 OK:**
+```json
+{
+  "missionId": 1,
+  "status": "SUCCESS",
+  "fuelConsumed": 500,
+  "resourcesFound": [
+    { "resource": "Iron", "quantity": 25 }
+  ],
+  "events": [
+    "Mission completed successfully",
+    "Resources collected: Iron (25)"
+  ]
+}
+```
+
+**Response 200 OK (exemplo de falha):**
+```json
+{
+  "missionId": 1,
+  "status": "FAILED",
+  "fuelConsumed": 500,
+  "resourcesFound": [],
+  "events": [
+    "Mechanical failure detected",
+    "Spacecraft damaged"
+  ]
+}
+```
+
+> Efeitos por evento: `MECHANICAL_FAILURE` danifica a nave (`DAMAGED`); `ALIEN_ATTACK` reduz 100 XP dos astronautas; `COSMIC_STORM` faz a missao falhar sem gerar recursos. Em qualquer resultado o combustivel e consumido.
 
 ### Deletar
 
@@ -543,8 +604,6 @@ DELETE /mission/{id}
 | id | Long | Sim | ID da missao |
 
 **Response 204 No Content**
-
-> A execucao real da missao ainda nao foi implementada (ver roadmap).
 
 ---
 

@@ -1,5 +1,7 @@
 package com.goomez.CosmosX.handler;
 
+import com.goomez.CosmosX.exception.InsufficientFuelException;
+import com.goomez.CosmosX.exception.InvalidMissionStateException;
 import com.goomez.CosmosX.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +34,15 @@ public class GlobalExceptionHandler {
             "timestamp", LocalDateTime.now().toString(),
             "status", 400,
             "message", message
+        ));
+    }
+
+    @ExceptionHandler({InsufficientFuelException.class, InvalidMissionStateException.class})
+    public ResponseEntity<Map<String, Object>> handleBadRequest(RuntimeException ex) {
+        return ResponseEntity.badRequest().body(Map.of(
+            "timestamp", LocalDateTime.now().toString(),
+            "status", 400,
+            "message", ex.getMessage()
         ));
     }
 

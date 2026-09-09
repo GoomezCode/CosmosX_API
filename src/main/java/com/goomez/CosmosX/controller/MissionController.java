@@ -1,5 +1,6 @@
 package com.goomez.CosmosX.controller;
 
+import com.goomez.CosmosX.dto.MissionExecutionResponse;
 import com.goomez.CosmosX.dto.MissionRequest;
 import com.goomez.CosmosX.dto.MissionResponse;
 import com.goomez.CosmosX.dto.MissionUpdateRequest;
@@ -24,7 +25,7 @@ public class MissionController {
     @GetMapping
     public ResponseEntity<List<MissionResponse>> listAll() {
         List<MissionResponse> response = service.listAll().stream()
-            .map(m -> new MissionResponse(m.getId(), m.getPlanetId(), m.getAstronauts(), m.getStatus()))
+            .map(m -> new MissionResponse(m.getId(), m.getSpacecraftId(), m.getPlanetId(), m.getAstronauts(), m.getStatus()))
             .toList();
         return ResponseEntity.ok(response);
     }
@@ -33,25 +34,25 @@ public class MissionController {
     public ResponseEntity<MissionResponse> listById(@PathVariable Long id) {
         Mission mission = service.listById(id);
         return ResponseEntity.ok(new MissionResponse(
-            mission.getId(), mission.getPlanetId(), mission.getAstronauts(), mission.getStatus()
+            mission.getId(), mission.getSpacecraftId(), mission.getPlanetId(), mission.getAstronauts(), mission.getStatus()
         ));
     }
 
     @PostMapping
     public ResponseEntity<MissionResponse> create(@Valid @RequestBody MissionRequest request) {
-        Mission mission = new Mission(0, request.planetId(), request.astronauts(), "PENDING");
+        Mission mission = new Mission(0, request.spacecraftId(), request.planetId(), request.astronauts(), "PENDING");
         Mission saved = service.add(mission);
         return ResponseEntity.status(HttpStatus.CREATED).body(new MissionResponse(
-            saved.getId(), saved.getPlanetId(), saved.getAstronauts(), saved.getStatus()
+            saved.getId(), saved.getSpacecraftId(), saved.getPlanetId(), saved.getAstronauts(), saved.getStatus()
         ));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<MissionResponse> update(@PathVariable Long id, @Valid @RequestBody MissionUpdateRequest request) {
-        Mission mission = new Mission(id, request.planetId(), request.astronauts(), request.status());
+        Mission mission = new Mission(id, request.spacecraftId(), request.planetId(), request.astronauts(), request.status());
         Mission updated = service.update(id, mission);
         return ResponseEntity.ok(new MissionResponse(
-            updated.getId(), updated.getPlanetId(), updated.getAstronauts(), updated.getStatus()
+            updated.getId(), updated.getSpacecraftId(), updated.getPlanetId(), updated.getAstronauts(), updated.getStatus()
         ));
     }
 
@@ -59,5 +60,10 @@ public class MissionController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/start")
+    public ResponseEntity<MissionExecutionResponse> start(@PathVariable Long id) {
+        return ResponseEntity.ok(service.executeMission(id));
     }
 }

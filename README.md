@@ -84,11 +84,11 @@ Documentacao detalhada: [docs/ENDPOINTS.md](docs/ENDPOINTS.md)
 - [x] DTO Pattern (Request/Response)
 - [x] Bean Validation
 - [x] Global Exception Handler
-- [ ] Testes unitarios
-- [ ] Execucao de missoes (`/missions/{id}/start`)
-- [ ] Sistema de combustivel
-- [ ] Sistema de perigo / eventos aleatorios
-- [ ] Geracao de recursos ao fim da missao
+- [x] Testes unitarios
+- [x] Execucao de missoes (`/mission/{id}/start`)
+- [x] Sistema de combustivel
+- [x] Sistema de perigo / eventos aleatorios
+- [x] Geracao de recursos ao fim da missao
 - [ ] Endpoint de estatisticas (`/stats`)
 - [ ] Ranking de astronautas
 - [ ] Historico de missoes

@@ -4,14 +4,16 @@ import java.util.List;
 
 public class Mission {
     private long id;
+    private long spacecraftId;
     private long planetId;
     private List<Long> astronauts;
     private String status;
 
     public Mission() {}
 
-    public Mission(long id, long planetId, List<Long> astronauts, String status) {
+    public Mission(long id, long spacecraftId, long planetId, List<Long> astronauts, String status) {
         this.id = id;
+        this.spacecraftId = spacecraftId;
         this.planetId = planetId;
         this.astronauts = astronauts;
         this.status = status;
@@ -23,6 +25,14 @@ public class Mission {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getSpacecraftId() {
+        return spacecraftId;
+    }
+
+    public void setSpacecraftId(long spacecraftId) {
+        this.spacecraftId = spacecraftId;
     }
 
     public long getPlanetId() {
