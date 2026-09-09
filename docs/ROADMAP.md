@@ -12,6 +12,7 @@ Roadmap de implementacao do projeto CosmosX API.
 4. [Fase 3 - Simulacao de Missoes](#fase-3---simulacao-de-missoes)
 5. [Fase 4 - Estatisticas e Ranking](#fase-4---estatisticas-e-ranking)
 6. [Fase 5 - Preparacao p/ Integracao com Site](#fase-5---preparacao-p-integracao-com-site-portfolio)
+7. [Fase 6 - Validacao Final e Entrega](#fase-6---validacao-final-e-entrega)
 
 ---
 
@@ -24,6 +25,7 @@ Roadmap de implementacao do projeto CosmosX API.
 | 3 | Simulacao de Missoes | Alta | ✅ Concluida |
 | 4 | Estatisticas e Ranking | Media | ✅ Concluida |
 | 5 | Preparacao p/ Integracao com Site | Alta | ⏳ Pendente |
+| 6 | Validacao Final e Entrega | Alta | ⏳ Pendente |
 
 ---
 
@@ -361,10 +363,45 @@ POST /exploration/discover
 
 ---
 
+## Fase 6 - Validacao Final e Entrega
+
+**Objetivo:** Fechar o projeto com validacao completa, documentacao de referencia tecnica, termos de licenca e marcacao de CONCLUIDO. ⏳ Pendente
+
+> **Decisoes de design aprovadas:** licenca **MIT**; liberacao final com merge `develop` -> `main` + tag `v2.0.0` (a `v1.0.0` sera criada na Fase 5); teste de integracao E2E com `@SpringBootTest`; Actuator para health check; API continua publica (leitura + escrita). **Depende da Fase 5.**
+
+### Tarefas
+
+#### 1. Testes
+- [ ] Criar teste de integracao E2E (`@SpringBootTest` + MockMvc): astronauta -> nave -> planeta -> missao -> execucao -> stats/ranking
+- [ ] Rodar suite completa e confirmar 0 falhas
+- [ ] Confirmar gate de cobertura (JaCoCo >= 80% de linha, herdado da Fase 5)
+
+#### 2. Documentacoes
+- [ ] Criar Technical Reference Guide (`docs/TECHNICAL_REFERENCE.md`) consolidando arquitetura, API, configuracao, manutencao e deploy
+- [ ] Auditoria final de todas as docs (GUIA, ENDPOINTS, ROADMAP, ARQUITETURA, README) — consistencia com o codigo
+- [ ] Criar `CHANGELOG.md` com historico de versoes Fase 1-6
+
+#### 3. Termos
+- [ ] Adicionar licenca MIT (`LICENSE`)
+- [ ] Referenciar licenca no README e no `pom.xml` (`<licenses>`)
+
+#### 4. Ajustes finais
+- [ ] Adicionar Spring Boot Actuator (`/actuator/health`)
+- [ ] Adicionar badges no README (versao, testes, Java/Spring)
+- [ ] Marcar README como projeto CONCLUIDO e remover "em desenvolvimento"
+- [ ] Marcar todas as fases (1-6) como concluidas no ROADMAP
+
+#### 5. Entrega
+- [ ] Commit + push `develop`
+- [ ] Merge `develop` -> `main` + push
+- [ ] Tag `v2.0.0` + push da tag
+
+---
+
 ## Prioridade de Implementacao
 
 ```
-Fase 1 (CRUD) → Fase 2 (Testes) → Fase 3 (Simulacao) → Fase 4 (Estatisticas) → Fase 5 (Preparacao p/ Site)
+Fase 1 (CRUD) → Fase 2 (Testes) → Fase 3 (Simulacao) → Fase 4 (Estatisticas) → Fase 5 (Preparacao p/ Site) → Fase 6 (Validacao Final)
 ```
 
 Cada fase depende da anterior. Nao e possivel pular fases.
