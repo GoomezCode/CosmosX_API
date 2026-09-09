@@ -11,6 +11,7 @@ Roadmap de implementacao do projeto CosmosX API.
 3. [Fase 2 - Testes Unitarios](#fase-2---testes-unitarios)
 4. [Fase 3 - Simulacao de Missoes](#fase-3---simulacao-de-missoes)
 5. [Fase 4 - Estatisticas e Ranking](#fase-4---estatisticas-e-ranking)
+6. [Fase 5 - Preparacao p/ Integracao com Site](#fase-5---preparacao-p-integracao-com-site-portfolio)
 
 ---
 
@@ -22,6 +23,7 @@ Roadmap de implementacao do projeto CosmosX API.
 | 2 | Testes Unitarios | Alta | ✅ Concluida |
 | 3 | Simulacao de Missoes | Alta | ✅ Concluida |
 | 4 | Estatisticas e Ranking | Media | ✅ Concluida |
+| 5 | Preparacao p/ Integracao com Site | Alta | ⏳ Pendente |
 
 ---
 
@@ -335,10 +337,34 @@ POST /exploration/discover
 
 ---
 
+## Fase 5 - Preparacao p/ Integracao com Site (Portfolio)
+
+**Objetivo:** Preparar a API para o site futuro: persistencia real (JPA + H2), CORS, Swagger/OpenAPI, cobertura medida (JaCoCo) e entrega via `main`. ⏳ Pendente
+
+> **Decisoes de design aprovadas:** migracao JSON -> JPA + H2 (arquivo em `./data/`, gitignored); `ResourceFound` vira `@Embeddable`; API publica leitura + escrita (sem autenticacao por enquanto); tag `v1.0.0` no merge para `main`.
+
+### Tarefas
+
+- [ ] Adicionar `spring-boot-starter-data-jpa` e H2 ao `pom.xml`
+- [ ] Anotar entidades (`@Entity`, `@Id`, `@GeneratedValue`, `@ElementCollection`)
+- [ ] Criar pacote `repository/` (AstronautRepository, SpacecraftRepository, PlanetRepository, MissionRepository)
+- [ ] Refatorar services para usar repositorios (remover `ObjectMapper`/leitura de arquivo)
+- [ ] Criar data seeding via `CommandLineRunner`
+- [ ] Configurar datasource H2 em `application.properties` (remover `app.data.path`)
+- [ ] Remover `src/main/resources/data/*.json`
+- [ ] Configurar CORS (`app.cors.allowed-origins`)
+- [ ] Adicionar Swagger/OpenAPI (springdoc-openapi 3.1.1)
+- [ ] Adicionar JaCoCo com check de 80% de linha
+- [ ] Reescrever testes de service (mock de repositories)
+- [ ] Atualizar documentacao
+- [ ] Merge `develop` -> `main` + tag `v1.0.0`
+
+---
+
 ## Prioridade de Implementacao
 
 ```
-Fase 1 (CRUD) → Fase 2 (Testes) → Fase 3 (Simulacao) → Fase 4 (Estatisticas)
+Fase 1 (CRUD) → Fase 2 (Testes) → Fase 3 (Simulacao) → Fase 4 (Estatisticas) → Fase 5 (Preparacao p/ Site)
 ```
 
 Cada fase depende da anterior. Nao e possivel pular fases.
