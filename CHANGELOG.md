@@ -6,6 +6,16 @@ O formato segue as convencoes de [Keep a Changelog](https://keepachangelog.com/p
 
 ---
 
+## [v2.0.1] - 2026-09-09
+
+Compatibilidade de build: permite iniciar o projeto com qualquer JDK 17, 21 ou 25.
+
+### Corrigido
+- `java.version` do `pom.xml` reduzido de `25` para `17` (minimo exigido pelo Spring Boot 4.1). O codigo nao usa recursos exclusivos do Java 25, entao compila/roda em qualquer JDK 17+ — eliminando o `release version XX not supported` quando o ambiente tem apenas um JDK 17/21 instalado
+- Documentacao atualizada (GUIA, TECHNICAL_REFERENCE, README) com solucao para o erro `release version 17 not supported`, incluindo o caso de a maquina ter apenas o JRE instalado (sem `javac`): passou-se a exigir `JAVA_HOME` apontando para um JDK completo
+
+---
+
 ## [v2.0.0] - 2026-09-09
 
 Fechamento do projeto: validacao final e entrega.

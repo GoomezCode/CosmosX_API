@@ -1,18 +1,18 @@
 <h1 align="center">CosmosX API</h1>
 
 <p align="center">
-  <img alt="Versao" src="https://img.shields.io/badge/versao-v2.0.0-blue">
+  <img alt="Versao" src="https://img.shields.io/badge/versao-v2.0.1-blue">
   <img alt="Status" src="https://img.shields.io/badge/status-concluido-success">
   <img alt="Testes" src="https://img.shields.io/badge/testes-98%20passaram-brightgreen">
   <img alt="Cobertura" src="https://img.shields.io/badge/cobertura-%3E%3D97%25-brightgreen">
-  <img alt="Java" src="https://img.shields.io/badge/java-25-orange">
+  <img alt="Java" src="https://img.shields.io/badge/java-17%2B-orange">
   <img alt="Spring Boot" src="https://img.shields.io/badge/Spring%20Boot-4.1.0-brightgreen">
   <img alt="Licenca" src="https://img.shields.io/badge/licenca-MIT-blue">
 </p>
 
 API REST em **Java + Spring Boot** para gerenciamento de uma agencia espacial ficticia: astronautas, naves espaciais, planetas, missoes, simulacao de missoes, estatisticas e exploracao.
 
-> ✅ **Projeto CONCLUIDO.** Todas as fases do [Roadmap](docs/ROADMAP.md) foram implementadas e entregues na tag `v2.0.0`.
+> ✅ **Projeto CONCLUIDO.** Todas as fases do [Roadmap](docs/ROADMAP.md) foram implementadas e entregues na tag `v2.0.1`.
 
 ---
 
@@ -31,7 +31,7 @@ Os dados sao persistidos em um banco **H2** (arquivo `./data/`, gitignored) usan
 
 ## Tecnologias
 
-- Java 25
+- Java 17+ (compilado/testado até o Java 25)
 - Spring Boot 4.1.0 (Spring Web MVC)
 - Spring Data JPA (Hibernate)
 - H2 (banco embarcado + console web)
@@ -57,17 +57,22 @@ src/main/java/com/goomez/CosmosX/
 
 ## Como executar
 
-Pre-requisitos: **JDK 25** e **Maven** (ou use o wrapper incluso no projeto).
+Pre-requisitos: **JDK 17+** (ex.: 17, 21 ou 25 — precisa ter `javac`), e **Maven** (ou use o wrapper incluso no projeto).
 
 ```bash
 # clonar o repositorio
 git clone https://github.com/GoomezCode/CosmosX_API.git
 cd CosmosX_API
 
+# apontar para um JDK completo (com javac), se necessario
+export JAVA_HOME=~/.jdks/jdk-25.0.4.1+1
+
 # rodar a aplicacao
 ./mvnw spring-boot:run     # Linux/Mac
 mvnw.cmd spring-boot:run   # Windows
 ```
+
+> **Dica:** se der erro `release version 17 not supported`, o JDK em uso nao tem compilador/versao adequada — veja a [Solucao de Problemas](docs/GUIA.md#solucao-de-problemas).
 
 A aplicacao sobe por padrao em `http://localhost:8080`.
 
