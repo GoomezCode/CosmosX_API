@@ -105,7 +105,7 @@ public class AstronautService {
 **Regras:**
 - POJOs simples com getters/setters
 - Sem anotacoes JPA (persistencia em JSON)
-- Construtor vazio + construtor com todos os campos
+- Construtor vazio + construtor com os campos principais
 - NUNCA contem logica de negocio
 
 **Exemplo:**
@@ -179,7 +179,7 @@ Trata todas as excecoes de forma centralizada.
 
 **Beneficios:**
 - Respostas padronizadas de erro
-- Codigo de tratamento duplicado
+- Elimina codigo de tratamento duplicado
 - Melhor experiencia para o cliente
 
 **Implementacao:**
@@ -230,7 +230,7 @@ Controla HTTP status codes explicitamente.
 | Metodo | camelCase | `listAll()` |
 | Variavel | camelCase | `astronautList` |
 | Constante | SCREAMING_SNAKE_CASE | `MAX_FUEL` |
-| Pacote | lowercase | `com.goomez.cosmosx.service` |
+| Pacote | lowercase | `com.goomez.CosmosX.service` |
 
 ### Nomenclatura de Arquivos
 
@@ -305,6 +305,8 @@ public List<Astronaut> listAll() {
 |---------|--------|-----------|
 | `ResourceNotFoundException` | 404 | Recurso nao encontrado |
 | `MethodArgumentNotValidException` | 400 | Erro de validacao |
+| `InsufficientFuelException` | 400 | Combustivel insuficiente para a missao |
+| `InvalidMissionStateException` | 400 | Missao em estado invalido para execucao |
 | `Exception` | 500 | Erro generico |
 
 ## Validacao

@@ -43,7 +43,7 @@ mvnw.cmd clean compile   # Windows
 
 ```
 CosmosX_API/
-├── .opencode/                    # Configuracao opencode
+├── .opencode/                    # Configuracao opencode (local, gitignored)
 │   └── skills/
 │       └── java-design-patterns/
 │           └── SKILL.md
@@ -71,8 +71,10 @@ CosmosX_API/
 │   │           └── mission.json
 │   └── test/
 │       └── java/com/goomez/CosmosX/
-│           └── CosmosXApplicationTests.java
-├── opencode.json                 # Configuracao opencode
+│           ├── CosmosXApplicationTests.java
+│           ├── controller/       # Testes de endpoint (MockMvc)
+│           └── service/          # Testes de services (Mockito)
+├── opencode.json                 # Configuracao opencode (local, gitignored)
 ├── pom.xml                       # Dependencias Maven
 └── README.md
 ```
@@ -83,6 +85,7 @@ CosmosX_API/
 
 ```properties
 spring.application.name=CosmosX
+app.data.path=src/main/resources/data
 ```
 
 Porta padrao: **8080**
@@ -92,6 +95,8 @@ Para alterar a porta, adicione:
 server.port=8081
 ```
 
+> `app.data.path` define o diretorio dos arquivos JSON usados como banco de dados. Nos testes, o caminho e apontado para o `@TempDir`.
+
 ### Dependencias Principais
 
 | Dependencia | Descricao |
@@ -99,6 +104,7 @@ server.port=8081
 | `spring-boot-starter-webmvc` | Framework web |
 | `spring-boot-starter-validation` | Bean Validation |
 | `spring-boot-devtools` | Hot reload (dev) |
+| `spring-boot-starter-webmvc-test` | Testes (JUnit 5, MockMvc, Mockito) |
 
 ## Execucao
 
