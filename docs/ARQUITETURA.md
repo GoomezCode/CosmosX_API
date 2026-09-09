@@ -282,6 +282,7 @@ com.goomez.CosmosX/
 **Stack:**
 - `spring-boot-starter-data-jpa` (Hibernate)
 - H2 via `spring-boot-h2console` (console dev em `/h2-console`)
+- `spring-boot-starter-actuator` (health check em `/actuator/health`)
 - `ddl-auto=update` (schema gerado automaticamente)
 
 **Como funciona:**
@@ -302,7 +303,7 @@ public List<Astronaut> listAll() {
 - Consultas otimizadas pelo Hibernate
 - Schema evolutivo via `ddl-auto`
 
-> Nos testes usa-se H2 **in-memory** (`src/test/resources/application.properties`) com `ddl-auto=create-drop`.
+> Nos testes usa-se H2 **in-memory** (`src/test/resources/application.properties`) com `ddl-auto=create-drop`. Alem dos testes unitarios (services) e de endpoint (controllers), existe o teste de integracao E2E em `src/test/java/com/goomez/CosmosX/e2e/` (`@SpringBootTest` + MockMvc) que exercita o fluxo completo contra o banco real e o Actuator.
 
 ## Tratamento de Erros
 

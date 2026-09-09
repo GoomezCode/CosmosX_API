@@ -16,6 +16,7 @@ Documentacao detalhada de todos os endpoints da API.
 5. [Estatisticas](#estatisticas--stats)
 6. [Ranking](#ranking--ranking)
 7. [Exploracao](#exploracao--exploration)
+8. [Actuator](#actuator-actuator-health)
 
 ---
 
@@ -746,6 +747,30 @@ Simula a descoberta de um planeta, gerando recursos de acordo com o nivel de per
   "message": "dangerLevel: must be less than or equal to 10"
 }
 ```
+
+---
+
+## Actuator `/actuator/health`
+
+### Health check (Fase 6)
+
+```
+GET /actuator/health
+```
+
+Verifica a saude da aplicacao (usado pelo site/portfolio e por monitores de uptime). Exposto via Spring Boot Actuator.
+
+**Response 200 OK:**
+```json
+{
+  "status": "UP"
+}
+```
+
+**Campos:**
+| Campo | Tipo | Descricao |
+|-------|------|-----------|
+| status | String | `UP` quando a aplicacao esta saudavel |
 
 ---
 

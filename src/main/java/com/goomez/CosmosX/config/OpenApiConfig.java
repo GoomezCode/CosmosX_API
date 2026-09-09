@@ -15,7 +15,7 @@ public class OpenApiConfig {
             .info(new Info()
                 .title("CosmosX API")
                 .description("REST API for a fictional space agency: astronauts, spacecraft, planets, missions, statistics and exploration.")
-                .version("v1.0.0")
+                .version("v2.0.0")
                 .license(new License().name("MIT")));
     }
 }

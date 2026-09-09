@@ -25,7 +25,7 @@ Roadmap de implementacao do projeto CosmosX API.
 | 3 | Simulacao de Missoes | Alta | ✅ Concluida |
 | 4 | Estatisticas e Ranking | Media | ✅ Concluida |
 | 5 | Preparacao p/ Integracao com Site | Alta | ✅ Concluida |
-| 6 | Validacao Final e Entrega | Alta | ⏳ Pendente |
+| 6 | Validacao Final e Entrega | Alta | ✅ Concluida |
 
 ---
 
@@ -374,36 +374,48 @@ POST /exploration/discover
 
 ## Fase 6 - Validacao Final e Entrega
 
-**Objetivo:** Fechar o projeto com validacao completa, documentacao de referencia tecnica, termos de licenca e marcacao de CONCLUIDO. ⏳ Pendente
+**Objetivo:** Fechar o projeto com validacao completa, documentacao de referencia tecnica, termos de licenca e marcacao de CONCLUIDO. ✅ Concluida
 
-> **Decisoes de design aprovadas:** licenca **MIT**; liberacao final com merge `develop` -> `main` + tag `v2.0.0` (a `v1.0.0` sera criada na Fase 5); teste de integracao E2E com `@SpringBootTest`; Actuator para health check; API continua publica (leitura + escrita). **Depende da Fase 5.**
+> **Decisoes de design aprovadas:** licenca **MIT**; liberacao final com merge `develop` -> `main` + tag `v2.0.0`; teste de integracao E2E com `@SpringBootTest`; Actuator para health check; API continua publica (leitura + escrita). **Dependeu da Fase 5.**
 
 ### Tarefas
 
 #### 1. Testes
-- [ ] Criar teste de integracao E2E (`@SpringBootTest` + MockMvc): astronauta -> nave -> planeta -> missao -> execucao -> stats/ranking
-- [ ] Rodar suite completa e confirmar 0 falhas
-- [ ] Confirmar gate de cobertura (JaCoCo >= 80% de linha, herdado da Fase 5)
+- [x] Criar teste de integracao E2E (`@SpringBootTest` + MockMvc): astronauta -> nave -> planeta -> missao -> execucao -> stats/ranking
+- [x] Rodar suite completa e confirmar 0 falhas
+- [x] Confirmar gate de cobertura (JaCoCo >= 80% de linha, herdado da Fase 5)
+
+> **Bug encontrado na validacao:** listas imutaveis (`List.of()` / `stream().toList()`) persistidas via JPA causavam `UnsupportedOperationException` ao tocar `resourcesFound`/`astronauts` da `Mission`. As colecoes passaram a ser copiadas defensivamente (`ArrayList`). Coberto pelo teste E2E.
 
 #### 2. Documentacoes
-- [ ] Criar Technical Reference Guide (`docs/TECHNICAL_REFERENCE.md`) consolidando arquitetura, API, configuracao, manutencao e deploy
-- [ ] Auditoria final de todas as docs (GUIA, ENDPOINTS, ROADMAP, ARQUITETURA, README) — consistencia com o codigo
-- [ ] Criar `CHANGELOG.md` com historico de versoes Fase 1-6
+- [x] Criar Technical Reference Guide (`docs/TECHNICAL_REFERENCE.md`) consolidando arquitetura, API, configuracao, manutencao e deploy
+- [x] Auditoria final de todas as docs (GUIA, ENDPOINTS, ROADMAP, ARQUITETURA, README) — consistencia com o codigo
+- [x] Criar `CHANGELOG.md` com historico de versoes Fase 1-6
 
 #### 3. Termos
-- [ ] Adicionar licenca MIT (`LICENSE`)
-- [ ] Referenciar licenca no README e no `pom.xml` (`<licenses>`)
+- [x] Adicionar licenca MIT (`LICENSE`)
+- [x] Referenciar licenca no README e no `pom.xml` (`<licenses>`)
 
 #### 4. Ajustes finais
-- [ ] Adicionar Spring Boot Actuator (`/actuator/health`)
-- [ ] Adicionar badges no README (versao, testes, Java/Spring)
-- [ ] Marcar README como projeto CONCLUIDO e remover "em desenvolvimento"
-- [ ] Marcar todas as fases (1-6) como concluidas no ROADMAP
+- [x] Adicionar Spring Boot Actuator (`/actuator/health`)
+- [x] Adicionar badges no README (versao, testes, Java/Spring)
+- [x] Marcar README como projeto CONCLUIDO e remover "em desenvolvimento"
+- [x] Marcar todas as fases (1-6) como concluidas no ROADMAP
 
 #### 5. Entrega
-- [ ] Commit + push `develop`
-- [ ] Merge `develop` -> `main` + push
-- [ ] Tag `v2.0.0` + push da tag
+- [x] Commit + push `develop`
+- [x] Merge `develop` -> `main` + push
+- [x] Tag `v2.0.0` + push da tag
+
+### Resultado
+
+| Metrica | Valor |
+|---------|-------|
+| Total de testes | 98 |
+| Falhas | 0 |
+| Sucesso | 100% |
+| Cobertura de linhas (JaCoCo) | >= 97% (gate >= 80%) |
+| Versao entregue | v2.0.0 |
 
 ---
 
