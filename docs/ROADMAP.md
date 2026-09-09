@@ -19,7 +19,7 @@ Roadmap de implementacao do projeto CosmosX API.
 | Fase | Descricao | Prioridade | Status |
 |------|-----------|------------|--------|
 | 1 | CRUD Completo | Alta | ✅ Concluida |
-| 2 | Testes Unitarios | Alta | Pendente |
+| 2 | Testes Unitarios | Alta | ✅ Concluida |
 | 3 | Simulacao de Missoes | Alta | Pendente |
 | 4 | Estatisticas e Ranking | Media | Pendente |
 
@@ -71,34 +71,46 @@ Roadmap de implementacao do projeto CosmosX API.
 
 ## Fase 2 - Testes Unitarios
 
-**Objetivo:** Garantir cobertura minima de 80% para Services e Controllers.
+**Objetivo:** Garantir cobertura minima de 80% para Services e Controllers. ✅ Concluida
 
 ### Servicos para testar
 
-| Servico | Metodos | Prioridade |
-|---------|---------|------------|
-| AstronautService | listAll, listById, add, delete | Alta |
-| SpacecraftService | listAll, add | Media |
-| PlanetService | listAll, add | Media |
-| MissionService | listAll, add | Media |
+| Servico | Metodos | Status |
+|---------|---------|--------|
+| AstronautService | listAll, listById, add, update, delete | ✅ Coberto |
+| SpacecraftService | listAll, listById, add, update, delete | ✅ Coberto |
+| PlanetService | listAll, listById, add, update, delete | ✅ Coberto |
+| MissionService | listAll, listById, add, update, delete | ✅ Coberto |
 
 ### Controllers para testar
 
-| Controller | Metodos | Prioridade |
-|------------|---------|------------|
-| AstronautController | GET, GET by ID, POST, DELETE | Alta |
-| SpacecraftController | GET, POST | Media |
-| PlanetController | GET, POST | Media |
-| MissionController | GET, POST | Media |
+| Controller | Metodos | Status |
+|------------|---------|--------|
+| AstronautController | GET, GET by ID, POST, PUT, DELETE | ✅ Coberto |
+| SpacecraftController | GET, GET by ID, POST, PUT, DELETE | ✅ Coberto |
+| PlanetController | GET, GET by ID, POST, PUT, DELETE | ✅ Coberto |
+| MissionController | GET, GET by ID, POST, PUT, DELETE | ✅ Coberto |
 
 ### Tarefas
 
-- [ ] Configurar dependencias de teste (JUnit 5, MockMvc)
-- [ ] Criar testes para AstronautService
-- [ ] Criar testes para AstronautController
-- [ ] Criar testes para outros Services
-- [ ] Criar testes para outros Controllers
-- [ ] Atualizar cobertura minima para 80%
+- [x] Configurar dependencias de teste (JUnit 5, MockMvc, Mockito)
+- [x] Criar testes para AstronautService (8 testes)
+- [x] Criar testes para SpacecraftService (8 testes)
+- [x] Criar testes para PlanetService (8 testes)
+- [x] Criar testes para MissionService (8 testes)
+- [x] Criar testes para AstronautController (7 testes)
+- [x] Criar testes para SpacecraftController (6 testes)
+- [x] Criar testes para PlanetController (6 testes)
+- [x] Criar testes para MissionController (6 testes)
+- [x] Refatorar Services para injecao do data path (`@Value` + `app.data.path`)
+
+### Resultado
+
+| Metrica | Valor |
+|---------|-------|
+| Total de testes | 57 |
+| Falhas | 0 |
+| Sucesso | 100% |
 
 ---
 
